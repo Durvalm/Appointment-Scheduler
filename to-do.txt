@@ -1,0 +1,5 @@
+- Sync with calendar/google calendar
+- Sync with Google Analytics
+- Send notification by email (to customer and to the professional)
+
+
