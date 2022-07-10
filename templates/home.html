@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Showcase -->
+<section class="bg-dark text-light text-center text-sm-start">
+    <div class="container">
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <div>
+                <h1>Schedule Your <span class="text-warning">Haircut </span></h1>
+                <p class="lead my-5">
+                    We have the most professional barbers in the country! Schedule now your visit! Change
+                    The Way You Look,<span class="text-warning"> And Boost Up Your Confidence!</span>
+                </p>
+                <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#enroll">
+                    Schedule Now !
+                </button>
+            </div>
+            <img class="img-fluid w-50 d-none d-sm-block" src="{% static 'img/barber.svg' %}" alt="" />
+        </div>
+    </div>
+</section>
+
+<section class="bg-dark text-light p-5 text-center text-sm-start">
+    <div class="container pb-2">
+        <div class="row text-center ">
+            <div class="col-md">
+                <a href="#" class="text-decoration-none text-light">
+                    <div class="card bg-secondary text-light pt-3">
+                        <img src=" {% static 'img/haircut.png' %}"
+                            class="card-img-top rounded mx-auto d-block w-25 p-1">
+                        <div class="card-body text-center">
+                            <div class="h1 mb-3">
+                                <i class="bi bi-laptop"></i>
+                            </div>
+                            <h3 class="card-title mb-3 text-light">Haircut</h3>
+                            <p class="card-text text-light">
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                                Iure, quas quidem possimus dolorum esse eligendi?
+                            </p>
+                        </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-md">
+            <a href="#" class="text-decoration-none text-dark">
+                <div class="card pt-3">
+                    <img src="{% static 'img/shaving.png' %}" class="card-img-top rounded mx-auto d-block w-25 p-1">
+                    <div class="card-body text-center">
+                        <div class="h1 mb-3">
+                            <i class="bi bi-person-square"></i>
+                        </div>
+                        <h3 class="card-title mb-3">Shaving</h3>
+                        <p class="card-text">
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                            Iure, quas quidem possimus dolorum esse eligendi?
+                        </p>
+                    </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-md">
+        <a href="#" class="text-decoration-none text-light">
+            <div class="card bg-secondary text-light pt-3">
+                <img src="{% static 'img/styling.png' %}" class="card-img-top rounded mx-auto d-block w-25 p-1">
+                <div class="card-body text-center">
+                    <div class="h1 mb-3">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h3 class="card-title mb-3">Styling</h3>
+                    <p class="card-text">
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                        Iure, quas quidem possimus dolorum esse eligendi?
+                    </p>
+                </div>
+        </a>
+    </div>
+    </div>
+    </div>
+    </div>
+</section>
+{% endblock %}
