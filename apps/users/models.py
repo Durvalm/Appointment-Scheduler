@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-# from apps.saloon.models import Saloon
 
 
 class UserManager(BaseUserManager):
@@ -49,10 +48,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superadmin = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
-
-    # User is related to what saloon/branch/location
-
-    # saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE)
 
     # Date related
     date_joined = models.DateTimeField(auto_now_add=True)
