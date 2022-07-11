@@ -41,7 +41,7 @@ INSTALLED_APPS = [
 
     'apps.scheduler',
     'apps.barbers',
-    'apps.saloon',
+    'apps.saloons',
     'apps.users',
 ]
 
