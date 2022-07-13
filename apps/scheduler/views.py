@@ -9,18 +9,22 @@ def home(request):
 
 def scheduler(request):
     # Retrieve all saloons available
-    saloons = Saloon.objects.all()
+    all_saloons = Saloon.objects.all()
     barbers = None
+    saloon = None
 
     # Get desired saloon from user
     if request.method == 'POST':
         chosen_saloon = request.POST['saloon']
     
         barbers = Barber.objects.filter(saloon__city=chosen_saloon)
+        saloon = Saloon.objects.get(city=chosen_saloon)
+
 
     context = {
-        'saloons': saloons,
+        'all_saloons': all_saloons,
         'barbers': barbers,
+        'saloon': saloon,
     }
 
     return render(request, 'scheduler.html', context)

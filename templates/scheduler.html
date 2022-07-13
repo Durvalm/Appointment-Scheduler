@@ -2,6 +2,66 @@
 
 {% block content %}
 
+<div class="container py-5">
+    <form method="POST" action="{% url 'scheduler' %}">
+        {% csrf_token %}
+        <input class="form-control" list="saloons" type="text" name="saloon">
+        <datalist id="saloons">
+            {% for saloon in all_saloons %}
+            <option value="{{saloon.city}}" name="saloon1">
+                {% endfor %}
+        </datalist>
+        <button type="submit">Submit</button>
+
+    </form>
+</div>
+
+<div class="container">
+    {% for i in barbers %}
+    <h3>{{i}}</h3>
+    {% endfor %}
+</div>
+
+<p></p>
+
+<div class="container">
+    {% for barber in barbers %}
+    {% for schedule in barber.schedule.all %}
+    <h3>{{schedule.time}}</h3>
+    {% endfor %}
+    {% endfor %}
+</div>
+
+<div class="container">
+    <div class="mapouter">
+        <div class="gmap_canvas">
+            <iframe width="600" height="500" id="gmap_canvas"
+                src="https://maps.google.com/maps?q={{saloon.street_number}}%20{{saloon.sliced_address.0}}%20{{saloon.sliced_address.1}}%20{{saloon.city}}%20{{saloon.state}}&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
+
+            </iframe>
+            <a href="https://www.embedgooglemap.net/blog/divi-discount-code-elegant-themes-coupon/">divi
+                discount</a><br>
+            <style>
+                .mapouter {
+                    position: relative;
+                    text-align: right;
+                    height: 500px;
+                    width: 600px;
+                }
+            </style>
+            <a href="https://www.embedgooglemap.net">google maps on websites</a>
+            <style>
+                .gmap_canvas {
+                    overflow: hidden;
+                    background: none !important;
+                    height: 500px;
+                    width: 600px;
+                }
+            </style>
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}

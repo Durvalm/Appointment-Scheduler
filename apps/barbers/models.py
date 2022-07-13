@@ -16,6 +16,7 @@ class Barber(models.Model):
 class Schedule(models.Model):
     """Schedule should store all the hours the business operates."""
     time = models.DateTimeField(auto_now=False, blank=True)
+    is_available = models.BooleanField(default=True)
 
     def __str__(self):
         return self.time
