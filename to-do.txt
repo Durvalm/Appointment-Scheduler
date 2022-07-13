@@ -4,3 +4,33 @@
 
 
 - Map to each location
+
+<div class="container py-5">
+    <form method="POST" action="{% url 'scheduler' %}">
+        {% csrf_token %}
+        <input class="form-control" list="saloons" type="text" name="saloon">
+        <datalist id="saloons">
+            {% for saloon in saloons %}
+            <option value="{{saloon.city}}" name="saloon1">
+                {% endfor %}
+        </datalist>
+        <button type="submit">Submit</button>
+
+    </form>
+</div>
+
+<div class="container">
+    {% for i in barbers %}
+    <h3>{{i}}</h3>
+    {% endfor %}
+</div>
+
+<p></p>
+
+<div class="container">
+    {% for barber in barbers %}
+    {% for schedule in barber.schedule.all %}
+    <h3>{{schedule.time}}</h3>
+    {% endfor %}
+    {% endfor %}
+</div>

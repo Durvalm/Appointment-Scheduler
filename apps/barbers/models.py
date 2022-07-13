@@ -6,7 +6,24 @@ class Barber(models.Model):
     """Model for barbers who work in the saloons"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE, null=True)
-    # Schedule (Add later)
+    schedule = models.ManyToManyField('Schedule', blank=True)
+    service = models.ManyToManyField('Service', blank=True)
 
     def __str__(self):
         return self.user.username
+
+
+class Schedule(models.Model):
+    """Schedule should store all the hours the business operates."""
+    time = models.DateTimeField(auto_now=False, blank=True)
+
+    def __str__(self):
+        return self.time
+
+
+class Service(models.Model):
+    """Stores all the services the business provides"""
+    service = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.service
