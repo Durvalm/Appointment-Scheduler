@@ -8,8 +8,9 @@ def home(request):
     return render(request, 'home.html')
 
 def scheduler(request):
-    # Retrieve all saloons available
+    # Retrieve data to display on screen
     all_saloons = Saloon.objects.all()
+    all_services = Service.objects.all()
     barbers = None
     saloon = None
 
@@ -23,6 +24,7 @@ def scheduler(request):
 
     context = {
         'all_saloons': all_saloons,
+        'all_services': all_services,
         'barbers': barbers,
         'saloon': saloon,
     }

@@ -3,8 +3,6 @@
 - Send notification by email (to customer and to the professional)
 
 
-- Map to each location
-
 <div class="container py-5">
     <form method="POST" action="{% url 'scheduler' %}">
         {% csrf_token %}

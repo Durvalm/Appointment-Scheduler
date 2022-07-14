@@ -1,67 +1,101 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 
-<div class="container py-5">
-    <form method="POST" action="{% url 'scheduler' %}">
-        {% csrf_token %}
-        <input class="form-control" list="saloons" type="text" name="saloon">
-        <datalist id="saloons">
-            {% for saloon in all_saloons %}
-            <option value="{{saloon.city}}" name="saloon1">
-                {% endfor %}
-        </datalist>
-        <button type="submit">Submit</button>
 
-    </form>
-</div>
-
-<div class="container">
-    {% for i in barbers %}
-    <h3>{{i}}</h3>
-    {% endfor %}
-</div>
-
-<p></p>
-
-<div class="container">
-    {% for barber in barbers %}
-    {% for schedule in barber.schedule.all %}
-    <h3>{{schedule.time}}</h3>
-    {% endfor %}
-    {% endfor %}
-</div>
-
-<div class="container">
-    <div class="mapouter">
-        <div class="gmap_canvas">
-            <iframe width="600" height="500" id="gmap_canvas"
-                src="https://maps.google.com/maps?q={{saloon.street_number}}%20{{saloon.sliced_address.0}}%20{{saloon.sliced_address.1}}%20{{saloon.city}}%20{{saloon.state}}&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
-
-            </iframe>
-            <a href="https://www.embedgooglemap.net/blog/divi-discount-code-elegant-themes-coupon/">divi
-                discount</a><br>
-            <style>
-                .mapouter {
-                    position: relative;
-                    text-align: right;
-                    height: 500px;
-                    width: 600px;
-                }
-            </style>
-            <a href="https://www.embedgooglemap.net">google maps on websites</a>
-            <style>
-                .gmap_canvas {
-                    overflow: hidden;
-                    background: none !important;
-                    height: 500px;
-                    width: 600px;
-                }
-            </style>
-        </div>
+<section class="">
+    <div class="container pt-5">
+        <form method="POST" action="{% url 'scheduler' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <input class="form-control" list="saloons" type="text" name="saloon"
+                    placeholder="Enter Here the Location You Would Like To Visit">
+                <datalist id="saloons">
+                    {% for saloon in all_saloons %}
+                    <option value="{{saloon.city}}" name="saloon1">
+                        {% endfor %}
+                </datalist>
+                <button class="btn btn-primary">Submit</button>
+            </div>
+        </form>
     </div>
-</div>
 
+    <div class="row p-5 px-1">
+
+        <div class="col px-1">
+            <div class="container">
+                <img class="img-fluid" src="{% static 'img/fade.jpeg' %}" height=550" width="700">
+
+                <div class="p-4">
+                    <h2 ">Super Barbershop</h2>
+                    
+                <p> {% if saloon %}
+                    <small>
+                    {{saloon.street_number}},
+                    {% for i in saloon.sliced_address %}
+                    {{i}},
+                    {% endfor %}
+                    {{saloon.city}}, {{saloon.state}}
+                </small>
+                {% endif %}
+                </p><br>
+            
+                <ul class=" list-group list-group-flush w-100">
+                        <h3>Services</h3>
+                        {% for service in all_services %}
+                        <li class=" list-group-item list-group-item-action">
+                            🔥{{service.service}}💈
+                            <br>
+                            <small class="text-muted">
+                                {{service.description}}
+                            </small>
+                            <a href="#" class="badge rounded-pill bg-primary float-end text-decoration-none">Book</a>
+                        </li>
+                        {% endfor %}
+                        </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col px-1">
+            <div class="container">
+                <div class="mapouter">
+                    <div class="gmap_canvas">
+                        <iframe width="650" height="550" id="gmap_canvas" src="https://maps.google.com/maps?q={{saloon.street_number}}
+                {% for i in saloon.sliced_address %}%20{{i}}{% endfor %}
+                %20{{saloon.city}}%20{{saloon.state}}&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0"
+                            scrolling="no" marginheight="0" marginwidth="0">
+                        </iframe>
+                        <a href="https://www.embedgooglemap.net/blog/divi-discount-code-elegant-themes-coupon/">divi
+                            discount</a><br>
+                        <style>
+                            .mapouter {
+                                position: relative;
+                                text-align: right;
+                                height: 500px;
+                                width: 600px;
+                            }
+                        </style>
+                        <a href="https://www.embedgooglemap.net">google maps on websites</a>
+                        <style>
+                            .gmap_canvas {
+                                overflow: hidden;
+                                background: none !important;
+                                height: 550px;
+                                width: 650px;
+                            }
+                        </style>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+</section>
 
 {% endblock %}
