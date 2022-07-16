@@ -1,0 +1,19 @@
+<!-- Modal -->
+<form hx-post="{{ request.path }}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Pick Date & Time</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            {{ saloon }}
+            {{ service.id }}
+
+            <input type="text" name="test">
+            <!-- submit -->
+            <div class="text-center pb-1">
+                <button type="submit" class="btn btn-success">Confirm</button>
+            </div>
+        </div>
+    </div>
+</form>

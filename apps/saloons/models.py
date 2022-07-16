@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Avg, Count
 from apps.users.models import User
 
+
 class Saloon(models.Model):
     """Model that takes care of each saloon/franchise"""
 
@@ -30,7 +31,7 @@ class Saloon(models.Model):
         avg = 0
         if reviews['average'] is not None:
             avg = float(reviews['average'])
-        return avg
+        return round(avg, 2)
 
     def review_count(self):
         """Compute how many reviews the saloon has"""

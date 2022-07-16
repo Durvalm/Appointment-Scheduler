@@ -1,3 +1,4 @@
+from time import strftime
 from django.db import models
 from apps.users.models import User
 from apps.saloons.models import Saloon
@@ -18,8 +19,21 @@ class Schedule(models.Model):
     time = models.DateTimeField(auto_now=False, blank=True)
     is_available = models.BooleanField(default=True)
 
-    def __str__(self):
-        return self.time
+    def __str_(self):
+        return str(self.time)
+    
+    def get_time(self):
+        return self.time.strftime('%H:%M')
+    
+    def get_year(self):
+        return strftime('%y')
+
+    def get_month(self):
+        return strftime('%m')
+
+    def get_day(self):
+        return strftime('%d')
+
 
 
 class Service(models.Model):

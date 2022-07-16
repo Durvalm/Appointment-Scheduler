@@ -2,9 +2,9 @@
 {% load static %}
 {% block content %}
 
-
+<!-- search box section -->
 <section class="">
-    <div class="container pt-5">
+    <div class="container pt-5 ">
         <form method="POST" action="{% url 'scheduler' %}">
             {% csrf_token %}
             <div class="input-group">
@@ -19,83 +19,114 @@
             </div>
         </form>
     </div>
+</section>
 
-    <div class="row p-5 px-1">
+<!-- row -->
+<div class="row p-5 px-1">
+    <div class="col px-1">
+        <div class="container">
+            <!-- saloon image and info -->
+            <img class="img-fluid" src="{% static 'img/fade.jpeg' %}" height=550" width="700">
+            <div class="p-4">
+                <h2>Super Barbershop</h2>
 
-        <div class="col px-1">
-            <div class="container">
-                <img class="img-fluid" src="{% static 'img/fade.jpeg' %}" height=550" width="700">
-
-                <div class="p-4">
-                    <h2 ">Super Barbershop</h2>
-                    
                 <p> {% if saloon %}
                     <small>
-                    {{saloon.street_number}},
-                    {% for i in saloon.sliced_address %}
-                    {{i}},
-                    {% endfor %}
-                    {{saloon.city}}, {{saloon.state}}
-                </small>
-                {% endif %}
-                </p><br>
-            
-                <ul class=" list-group list-group-flush w-100">
-                        <h3>Services</h3>
-                        {% for service in all_services %}
-                        <li class=" list-group-item list-group-item-action">
-                            🔥{{service.service}}💈
-                            <br>
-                            <small class="text-muted">
-                                {{service.description}}
-                            </small>
-                            <a href="#" class="badge rounded-pill bg-primary float-end text-decoration-none">Book</a>
-                        </li>
+                        {{saloon.street_number}},
+                        {% for i in saloon.sliced_address %}
+                        {{i}},
                         {% endfor %}
-                        </ul>
-                </div>
+                        {{saloon.city}}, {{saloon.state}}
+                    </small>
+                    {% endif %}
+                </p><br>
 
-            </div>
-
-        </div>
-
-        <div class="col px-1">
-            <div class="container">
-                <div class="mapouter">
-                    <div class="gmap_canvas">
-                        <iframe width="650" height="550" id="gmap_canvas" src="https://maps.google.com/maps?q={{saloon.street_number}}
-                {% for i in saloon.sliced_address %}%20{{i}}{% endfor %}
-                %20{{saloon.city}}%20{{saloon.state}}&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0"
-                            scrolling="no" marginheight="0" marginwidth="0">
-                        </iframe>
-                        <a href="https://www.embedgooglemap.net/blog/divi-discount-code-elegant-themes-coupon/">divi
-                            discount</a><br>
-                        <style>
-                            .mapouter {
-                                position: relative;
-                                text-align: right;
-                                height: 500px;
-                                width: 600px;
-                            }
-                        </style>
-                        <a href="https://www.embedgooglemap.net">google maps on websites</a>
-                        <style>
-                            .gmap_canvas {
-                                overflow: hidden;
-                                background: none !important;
-                                height: 550px;
-                                width: 650px;
-                            }
-                        </style>
+                <!-- services available -->
+                <ul class=" list-group list-group-flush w-100">
+                    <h3>Services</h3>
+                    {% for service in all_services %}
+                    <li id="service-name-{{service.id}}" class=" list-group-item list-group-item-action">
+                        🔥{{service.service}}💈
+                        <br>
+                        <small id="service-description-{{service.id}}" class="text-muted">
+                            {{service.description}}
+                        </small>
+                        {% if saloon %}
+                        <button hx-get="{% url 'modal' saloon.city service.id %}" hx-target="#dialog"
+                            class="badge rounded-pill btn btn-primary float-end">Book</button>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                    <!-- Placeholder for the modal -->
+                    <div id="modal" class="modal fade">
+                        <div id="dialog" class="modal-dialog" hx-target="this"></div>
                     </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- map section -->
+    <div class="col px-1">
+        <div class="container mx-auto pb-5">
+            <div class="mapouter">
+                <div class="gmap_canvas">
+                    <iframe width="650" height="550" id="gmap_canvas" src="{% if saloon %}
+                https://maps.google.com/maps?q={{saloon.street_number}}
+                {% for i in saloon.sliced_address %}%20{{i}}{% endfor %}
+                %20{{saloon.city}}%20{{saloon.state}}&t=&z=13&ie=UTF8&iwloc=&output=embed
+                {% else %}https://maps.google.com/maps?q=&t=&z=13&ie=UTF8&iwloc=&output=embed{% endif %}"
+                        frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
+                    </iframe>
+                    <a href="https://www.embedgooglemap.net/blog/divi-discount-code-elegant-themes-coupon/">divi
+                        discount</a><br>
+                    <style>
+                        .mapouter {
+                            position: relative;
+                            text-align: right;
+                            height: 500px;
+                            width: 600px;
+                        }
+                    </style>
+                    <a href="https://www.embedgooglemap.net">google maps on websites</a>
+                    <style>
+                        .gmap_canvas {
+                            overflow: hidden;
+                            background: none !important;
+                            height: 550px;
+                            width: 650px;
+                        }
+                    </style>
                 </div>
             </div>
         </div>
 
+        <!-- customer reviews -->
+        <header class="section-heading pt-5">
+            <div class="container pt-4 text-center">
+                <h3>Customer Reviews </h3>
+                <div class="rating-star">
+                    <span>
+                        <i class="fa fa-star{% if saloon.average_review < 0.5 %}-o{% elif saloon.average_review >= 0.5 and saloon.average_review < 1 %}-half-o {% endif %}"
+                            aria-hidden="true"></i>
+                        <i class="fa fa-star{% if saloon.average_review < 1.5 %}-o{% elif saloon.average_review >= 1.5 and saloon.average_review < 2 %}-half-o {% endif %}"
+                            aria-hidden="true"></i>
+                        <i class="fa fa-star{% if saloon.average_review < 2.5 %}-o{% elif saloon.average_review >= 2.5 and saloon.average_review < 3 %}-half-o {% endif %}"
+                            aria-hidden="true"></i>
+                        <i class="fa fa-star{% if saloon.average_review < 3.5 %}-o{% elif saloon.average_review >= 3.5 and saloon.average_review < 4 %}-half-o {% endif %}"
+                            aria-hidden="true"></i>
+                        <i class="fa fa-star{% if saloon.average_review < 4.5 %}-o{% elif saloon.average_review >= 4.5 and saloon.average_review < 5 %}-half-o {% endif %}"
+                            aria-hidden="true"></i>
 
-
-
+                        <span>{{ saloon.review_count }} reviews</span>
+                        <h4>{{saloon.average_review}}/5.0</h4>
+                    </span>
+                </div>
+            </div>
+        </header>
     </div>
-</section>
+
+</div>
+
 
 {% endblock %}
