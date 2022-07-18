@@ -8,7 +8,7 @@
         <form method="POST" action="{% url 'scheduler' %}">
             {% csrf_token %}
             <div class="input-group">
-                <input class="form-control" list="saloons" type="text" name="saloon"
+                <input class="form-control" id="loc" list="saloons" type="text" name="saloon"
                     placeholder="Enter Here the Location You Would Like To Visit">
                 <datalist id="saloons">
                     {% for saloon in all_saloons %}
