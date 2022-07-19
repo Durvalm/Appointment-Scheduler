@@ -16,24 +16,12 @@ class Barber(models.Model):
 
 class Schedule(models.Model):
     """Schedule should store all the hours the business operates."""
-    time = models.DateTimeField(auto_now=False, blank=True)
+    date = models.DateField(auto_now=False, blank=True, null=True)
+    time = models.TimeField(auto_now=False, blank=True, null=True)
     is_available = models.BooleanField(default=True)
 
-    def __str_(self):
-        return str(self.time)
-    
-    def get_time(self):
-        return self.time.strftime('%H:%M')
-    
-    def get_year(self):
-        return strftime('%y')
-
-    def get_month(self):
-        return strftime('%m')
-
-    def get_day(self):
-        return strftime('%d')
-
+    def __str__(self):
+        return f'{self.date} {self.time}'
 
 
 class Service(models.Model):
