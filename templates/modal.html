@@ -5,26 +5,32 @@
             <h5 class="modal-title" id="exampleModalLabel">Pick Date & Time</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <h3 class="text-center">{{ saloon.city }}</h3>
-        <h4 class="text-center">{{service.service}}</h4>
         <div class="modal-body text-center">
-            <input type="date" name="date" class="date-picker">
+            <!-- date input -->
+            <input type="date" name="date" class="date-picker form-control">
+            {% if available_schedule|length < 1 %} <small class="date-picker-message">Enter the desired appointment day
+                above</small>
 
-            {% for barber, time in available_schedule.items %}
-            <div class="oi">
-                <tr>
-                    <td>{{barber}}</td>
-                    {% for value in time %}
-                    <td>{{value}}</td>
-                    {% endfor %}
-                </tr>
-            </div>
-            {% endfor %}
+                <!-- Hour input -->
+                {% else %}
+                <input class="form-control" id="hour-picker" required list="hours" type="text" name="hours"
+                    placeholder="Enter Here The Time You Would Like To Visit Us">
+                <datalist id="hours">
+                    {% for hours in available_schedule %}
+                    <option value="{{hours}}" name="hour-input">
+                        {% endfor %}
+                </datalist>
+                {% endif %}
 
-            <!-- submit -->
-            <div class="text-center pb-1">
-                <button type="submit" class="btn btn-success">Confirm</button>
-            </div>
+                <!-- Barber input -->
+                {% for barber in barbers %}
+                <p>{{barber}}</p>
+                {% endfor %}
+
+                <!-- submit -->
+                <div class="text-center p-3">
+                    <button type="submit" class="btn btn-success">Confirm</button>
+                </div>
         </div>
     </div>
 </form>

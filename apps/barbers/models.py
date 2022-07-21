@@ -1,4 +1,3 @@
-from time import strftime
 from django.db import models
 from apps.users.models import User
 from apps.saloons.models import Saloon

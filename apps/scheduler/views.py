@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from apps.saloons.models import Saloon
 from apps.barbers.models import Barber, Schedule, Service
 from django.views.decorators.csrf import csrf_exempt
-
+from time import strftime
 # Create your views here.
 
 def home(request):
@@ -39,35 +39,37 @@ def modal(request, saloon, id):
     service = get_object_or_404(Service, id=id)
     saloon_ = Saloon.objects.get(city=saloon)
     barbers = None
+    available_barbers = None
     available_schedule = {}
 
-    # Post date from user inside modal
     if request.method == "POST":
 
-        date = request.POST['date']
+        #  If user is sending date input
+        if request.POST.get('date', False):
 
-        barbers = Barber.objects.filter(saloon=saloon_, service=service, schedule__date__in=[date]).distinct()
+            date = request.POST['date']
+            barbers = Barber.objects.filter(saloon=saloon_, service=service, schedule__date__in=[date]).distinct()
 
-        available_schedule = {}
-        for barber in barbers:
-            for day in barber.schedule.all():
-                if barber.user.first_name in available_schedule and str(day.date) == str(date):
-                    available_schedule[barber.user.first_name].append(str(day.time))
-                elif barber.user.first_name not in available_schedule and str(day.date) == str(date):
-                    available_schedule[barber.user.first_name] = [str(day.time)]
-                else:
-                    pass
-        print(available_schedule)
-
-    # Get Service id
-    else:
-        print("GET")
-        pass
+            # Create a set with hours available
+            available_schedule = []
+            for barber in barbers:
+                for day in barber.schedule.all():
+                    if str(day.date) == date and day.time.strftime('%H:%M') not in available_schedule:
+                        available_schedule.append(day.time.strftime('%H:%M'))
+                    else:
+                        pass
+            available_schedule.sort() 
+        
+        # If user is sending hour input
+        if request.POST.get('hour', False):
+            hour = request.POST['hour']
+            date = request.POST['date']
+            available_barbers = Barber.objects.filter(saloon=saloon_, service=service, schedule__date__in=[date], schedule__time__in=[hour]).distinct()
 
     context = {
         'service': service,
         'saloon': saloon_,
-        'barbers': barbers,
+        'barbers': available_barbers,
         'available_schedule': available_schedule,
     }
 
