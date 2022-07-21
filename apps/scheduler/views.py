@@ -1,10 +1,11 @@
-import json
-from django.http import HttpResponse, JsonResponse
+# import json
+# from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from apps.saloons.models import Saloon
+from apps.saloons.models import Saloon, Appointment
 from apps.barbers.models import Barber, Schedule, Service
-from django.views.decorators.csrf import csrf_exempt
-from time import strftime
+# from django.views.decorators.csrf import csrf_exempt
+# from time import strftime
+# from django.views.decorators.http import require_POST
 # Create your views here.
 
 def home(request):
@@ -54,7 +55,7 @@ def modal(request, saloon, id):
             available_schedule = []
             for barber in barbers:
                 for day in barber.schedule.all():
-                    if str(day.date) == date and day.time.strftime('%H:%M') not in available_schedule:
+                    if str(day.date) == date and day.time.strftime('%H:%M') not in available_schedule and day.is_available:
                         available_schedule.append(day.time.strftime('%H:%M'))
                     else:
                         pass
@@ -74,3 +75,25 @@ def modal(request, saloon, id):
     }
 
     return render(request, 'modal.html', context)
+
+
+def appointment_submit(request):
+    hours = request.POST['hour']
+    date = request.POST['date']
+    barber = request.POST['barber'].split()[0]
+    service = request.POST['service']
+    saloon_city = request.POST['saloon']
+
+    barber = Barber.objects.get(user__first_name=barber, saloon__city=saloon_city)
+    schedule = Schedule.objects.get(date=date, time=hours, barber=barber)
+    service = Service.objects.get(id=service)
+    saloon = Saloon.objects.get(city=saloon_city)
+
+    # Create appointment
+    appointment = Appointment.objects.create(schedule=schedule, barber=barber, service=service, saloon=saloon)
+    appointment.save()
+    print(appointment)
+
+    # Schedule.is_available == False
+
+    return redirect('scheduler')

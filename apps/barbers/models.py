@@ -8,6 +8,7 @@ class Barber(models.Model):
     saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE, null=True)
     schedule = models.ManyToManyField('Schedule', blank=True)
     service = models.ManyToManyField('Service', blank=True)
+    price = models.ForeignKey('Price', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.username
@@ -27,7 +28,13 @@ class Service(models.Model):
     """Stores all the services the business provides"""
     service = models.CharField(max_length=50)
     description = models.CharField(max_length=100, blank=True)
-    price = models.FloatField(null=True)
 
     def __str__(self):
         return self.service
+
+class Price(models.Model):
+    value = models.FloatField(null=True)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.value)

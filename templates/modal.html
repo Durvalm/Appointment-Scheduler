@@ -7,12 +7,15 @@
         </div>
         <div class="modal-body text-center">
             <!-- date input -->
+            <h5>Date:</h5>
             <input type="date" name="date" class="date-picker form-control">
-            {% if available_schedule|length < 1 %} <small class="date-picker-message">Enter the desired appointment day
+            {% if available_schedule|length < 1 %} <small class="date-picker-message">Enter the desired appointment
+                day
                 above</small>
 
                 <!-- Hour input -->
                 {% else %}
+                <h5 class="py-1">Time:</h5>
                 <input class="form-control" id="hour-picker" required list="hours" type="text" name="hours"
                     placeholder="Enter Here The Time You Would Like To Visit Us">
                 <datalist id="hours">
@@ -23,20 +26,29 @@
                 {% endif %}
 
                 <!-- Barber input -->
-                {% for barber in barbers %}
-                <p>{{barber}}</p>
-                {% endfor %}
+                {% if barbers %}
+                <h5 class="py-1">Barber:</h5>
+
+                <input class="form-control" id="barber-picker" required list="barbers" type="text" name="barber"
+                    placeholder="Select The Available Professional You Would Like To Work With">
+                <datalist id="barbers">
+                    {% for barber in barbers %}
+                    <option value="{{barber}}" name="barber-input">
+                        {% endfor %}
+                </datalist>
+                {% endif %}
 
                 <!-- submit -->
                 <div class="text-center p-3">
-                    <button type="submit" class="btn btn-success">Confirm</button>
+                    <a class="btn btn-success" id="submit">
+                        Confirm</a>
                 </div>
         </div>
     </div>
 </form>
 
 <script type="text/javascript">
+
     const serviceId = "{{service.id}}"
     const saloon = "{{saloon.city}}"
-
 </script>

@@ -52,3 +52,18 @@ class Review(models.Model):
 
     def __str__(self):
         return self.review[0:15]
+
+
+class Appointment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    schedule = models.ForeignKey('barbers.Schedule', on_delete=models.CASCADE)
+    price = models.FloatField(null=True, blank=True)
+    service = models.ForeignKey('barbers.Service', on_delete=models.CASCADE)
+    saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE)
+    barber = models.ForeignKey('barbers.Barber', on_delete=models.CASCADE)
+
+    def __str__(self):
+        if self.user:
+            return self.user.username
+        else:
+            return self.saloon.city

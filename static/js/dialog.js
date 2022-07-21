@@ -20,4 +20,5 @@
     htmx.on("hidden.bs.modal", () => {
         document.getElementById("dialog").innerHTML = ""
     })
-})()
+}
+)()

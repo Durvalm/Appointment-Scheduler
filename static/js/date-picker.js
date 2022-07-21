@@ -39,3 +39,10 @@ $(document).on('input', '#hour-picker', function (e) {
     return false;
 });
 
+
+$(document).on('keydown', '#hour-picker', function (e) {
+    if (e.key === 'Backspace') {
+        document.querySelector('#hour-picker').value = ''
+    }
+})
+
