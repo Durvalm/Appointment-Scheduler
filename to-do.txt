@@ -1,3 +1,8 @@
+
+- Make alert message to deal with determined problems: (Date input with no Hours available) (Wrong form submission)
+
+
+
 - Sync with calendar/google calendar
 - Sync with Google Analytics
 - Send notification by email (to customer and to the professional)

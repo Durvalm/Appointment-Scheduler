@@ -16,7 +16,7 @@
                 <!-- Hour input -->
                 {% else %}
                 <h5 class="py-1">Time:</h5>
-                <input class="form-control" id="hour-picker" required list="hours" type="text" name="hours"
+                <input class="form-control hour-picker" id="hour-picker" required list="hours" type="text" name="hours"
                     placeholder="Enter Here The Time You Would Like To Visit Us">
                 <datalist id="hours">
                     {% for hours in available_schedule %}
@@ -29,26 +29,37 @@
                 {% if barbers %}
                 <h5 class="py-1">Barber:</h5>
 
-                <input class="form-control" id="barber-picker" required list="barbers" type="text" name="barber"
-                    placeholder="Select The Available Professional You Would Like To Work With">
+                <input class="form-control barber-picker" id="barber-picker" required list="barbers" type="text"
+                    name="barber" placeholder="Select The Available Professional You Would Like To Work With">
                 <datalist id="barbers">
                     {% for barber in barbers %}
                     <option value="{{barber}}" name="barber-input">
                         {% endfor %}
                 </datalist>
                 {% endif %}
-
-                <!-- submit -->
-                <div class="text-center p-3">
-                    <a class="btn btn-success" id="submit">
-                        Confirm</a>
-                </div>
         </div>
+
+        <!-- Display cost -->
+        {% if cost %}
+        <div class="text-center">
+            <small>Total:</small>
+            <h4 class="cost">${{cost}}</h4>
+        </div>
+
+        <!-- submit -->
+        <div class="text-center p-3">
+            <a class="btn btn-success" id="submit">
+                Confirm</a>
+        </div>
+        {% endif %}
+
     </div>
+
 </form>
 
 <script type="text/javascript">
 
     const serviceId = "{{service.id}}"
     const saloon = "{{saloon.city}}"
+
 </script>

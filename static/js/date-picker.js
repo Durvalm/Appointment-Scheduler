@@ -1,6 +1,6 @@
 $(document).on('input', '.date-picker', function (e) {
     e.preventDefault();
-    date = document.querySelector(".date-picker").value;
+    const date = document.querySelector(".date-picker").value;
 
     $.ajax({
         type: "POST",
@@ -17,10 +17,11 @@ $(document).on('input', '.date-picker', function (e) {
     return false;
 });
 
+
 $(document).on('input', '#hour-picker', function (e) {
     e.preventDefault();
-    date = document.querySelector(".date-picker").value;
-    hour = document.querySelector("#hour-picker").value
+    const date = document.querySelector(".date-picker").value;
+    const hour = document.querySelector("#hour-picker").value
 
     $.ajax({
         type: "POST",
@@ -43,6 +44,12 @@ $(document).on('input', '#hour-picker', function (e) {
 $(document).on('keydown', '#hour-picker', function (e) {
     if (e.key === 'Backspace') {
         document.querySelector('#hour-picker').value = ''
+    }
+})
+
+$(document).on('keydown', '#barber-picker', function (e) {
+    if (e.key === 'Backspace') {
+        document.querySelector('#barber-picker').value = ''
     }
 })
 

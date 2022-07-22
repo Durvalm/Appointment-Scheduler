@@ -2,7 +2,7 @@
 # from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from apps.saloons.models import Saloon, Appointment
-from apps.barbers.models import Barber, Schedule, Service
+from apps.barbers.models import Barber, Schedule, Service, Price
 # from django.views.decorators.csrf import csrf_exempt
 # from time import strftime
 # from django.views.decorators.http import require_POST
@@ -40,6 +40,7 @@ def modal(request, saloon, id):
     service = get_object_or_404(Service, id=id)
     saloon_ = Saloon.objects.get(city=saloon)
     barbers = None
+    cost = None
     available_barbers = None
     available_schedule = {}
 
@@ -59,19 +60,35 @@ def modal(request, saloon, id):
                         available_schedule.append(day.time.strftime('%H:%M'))
                     else:
                         pass
-            available_schedule.sort() 
+            available_schedule.sort()
         
         # If user is sending hour input
         if request.POST.get('hour', False):
+            # Initialize variables
             hour = request.POST['hour']
             date = request.POST['date']
+
+            # Filter barbers by available ones in determined schedule
             available_barbers = Barber.objects.filter(saloon=saloon_, service=service, schedule__date__in=[date], schedule__time__in=[hour]).distinct()
+
+        if request.POST.get('barber', False):
+            # initialize variables
+            hour =  request.POST['hour']
+            date = request.POST['date']
+            barber = request.POST['barber']
+            barber_first_name = barber.split()[0]
+
+            chosen_barber = Barber.objects.get(user__first_name=barber_first_name)
+            for price in chosen_barber.price.all():
+                if price.service == service:
+                    cost = price
 
     context = {
         'service': service,
         'saloon': saloon_,
         'barbers': available_barbers,
         'available_schedule': available_schedule,
+        'cost': cost
     }
 
     return render(request, 'modal.html', context)
@@ -83,17 +100,20 @@ def appointment_submit(request):
     barber = request.POST['barber'].split()[0]
     service = request.POST['service']
     saloon_city = request.POST['saloon']
+    cost = request.POST['cost']
+    cost = float(cost)
 
     barber = Barber.objects.get(user__first_name=barber, saloon__city=saloon_city)
     schedule = Schedule.objects.get(date=date, time=hours, barber=barber)
     service = Service.objects.get(id=service)
     saloon = Saloon.objects.get(city=saloon_city)
-
+   
     # Create appointment
-    appointment = Appointment.objects.create(schedule=schedule, barber=barber, service=service, saloon=saloon)
+    appointment = Appointment.objects.create(schedule=schedule, barber=barber, service=service, saloon=saloon, price=cost)
     appointment.save()
-    print(appointment)
 
-    # Schedule.is_available == False
-
+    # Dissociate determined schedule from barber
+    barber.schedule.remove(schedule)
+    barber.save()
+    
     return redirect('scheduler')

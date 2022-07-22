@@ -8,7 +8,7 @@ class Barber(models.Model):
     saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE, null=True)
     schedule = models.ManyToManyField('Schedule', blank=True)
     service = models.ManyToManyField('Service', blank=True)
-    price = models.ForeignKey('Price', blank=True, null=True, on_delete=models.CASCADE)
+    price = models.ManyToManyField('Price', blank=True)
 
     def __str__(self):
         return self.user.username
