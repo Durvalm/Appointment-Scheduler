@@ -1,5 +1,5 @@
 // Posts user data of date
-$(document).on('input', '.date-picker', function (e) {
+$(document).on('change', '.date-picker', function (e) {
     e.preventDefault();
     const date = document.querySelector(".date-picker").value;
 
@@ -20,7 +20,7 @@ $(document).on('input', '.date-picker', function (e) {
 });
 
 // Posts user data of time
-$(document).on('input', '#hour-picker', function (e) {
+$(document).on('change', '#hour-picker', function (e) {
     e.preventDefault();
     // Get values from inputs
     const date = document.querySelector(".date-picker").value;

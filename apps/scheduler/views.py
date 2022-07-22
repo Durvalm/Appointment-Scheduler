@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from apps.saloons.models import Saloon, Appointment
 from apps.barbers.models import Barber, Schedule, Service
+from django.contrib import messages
 
 def home(request):
     """Renders out home page"""
@@ -11,13 +12,16 @@ def scheduler(request):
     # Retrieve data to display on screen (We'll display all saloons and services available)
     all_saloons = Saloon.objects.all()
     all_services = Service.objects.all()
-    barbers = None
     saloon = None
 
     # Get desired saloon from user
     if request.method == 'POST':
-        chosen_saloon = request.POST['saloon']
-        saloon = Saloon.objects.get(city=chosen_saloon)
+        try:
+            chosen_saloon = request.POST['saloon']
+            saloon = Saloon.objects.get(city=chosen_saloon)
+        # Handle  submission of non-existent saloon
+        except Saloon.DoesNotExist:
+            messages.error(request, 'Not found, please enter one of the options given!')
 
     context = {
         'all_saloons': all_saloons,
@@ -60,6 +64,10 @@ def modal(request, saloon, id):
                         pass
             # Sort hour values to display in the frontend 
             available_schedule.sort()
+
+            #  Display message if no spots in a day
+            if len(available_schedule) == 0:
+                messages.warning(request, 'No spots available in this day.')
         
         # If user is sending hour input
         if request.POST.get('hour', False):
@@ -71,6 +79,10 @@ def modal(request, saloon, id):
             # We'll use this to let user choose what barber he'd like
             available_barbers = Barber.objects.filter(saloon=saloon_, service=service, schedule__date__in=[date], schedule__time__in=[hour]).distinct()
 
+            #  Display message if no barbers are available at this time
+            if len(available_barbers) == 0:
+                messages.warning(request, 'No barbers available for this service at this time, please try another time from the options')
+
         #  If user is sending barber input
         if request.POST.get('barber', False):
             # initialize variables
@@ -81,10 +93,14 @@ def modal(request, saloon, id):
             barber_first_name = barber.split()[0]
 
             # Get the chosen barber by user, and display price charged for determined service 
-            chosen_barber = Barber.objects.get(user__first_name=barber_first_name, saloon=saloon_)
-            for price in chosen_barber.price.all():
-                if price.service == service:
-                    cost = price
+            try:
+                chosen_barber = Barber.objects.get(user__first_name=barber_first_name, saloon=saloon_)
+                for price in chosen_barber.price.all():
+                    if price.service == service:
+                        cost = price
+            # Display message if there's no such barber
+            except Barber.DoesNotExist:
+                messages.warning(request, 'Barber is not available for this service, please choose from the options.')
 
     context = {
         'service': service,

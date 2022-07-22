@@ -5,6 +5,7 @@
 <!-- search box section -->
 <section>
     <div class="container pt-5 ">
+        {% include 'includes/alerts.html' %}
         <form method="POST" action="{% url 'scheduler' %}" autocomplete="off">
             {% csrf_token %}
             <div class="input-group">

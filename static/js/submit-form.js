@@ -30,7 +30,7 @@ $(document).on('click', '#submit', function (e) {
 });
 
 // Posts user data of barber choice
-$(document).on('input', '#barber-picker', function (e) {
+$(document).on('change', '#barber-picker', function (e) {
     e.preventDefault();
 
     // gets data from input
