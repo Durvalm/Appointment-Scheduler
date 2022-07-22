@@ -7,8 +7,6 @@ class Saloon(models.Model):
     """Model that takes care of each saloon/franchise"""
 
     name = models.CharField(max_length=50)
-    # - Transactions (Add later)
-    
     # Fields related to location
     street_number = models.CharField(max_length=10, blank=True)
     adress = models.CharField(max_length=100, blank=True)  
@@ -43,6 +41,7 @@ class Saloon(models.Model):
 
 
 class Review(models.Model):
+    """Model that creates a review"""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE)
     review = models.TextField(max_length=500, blank=True)
@@ -55,6 +54,7 @@ class Review(models.Model):
 
 
 class Appointment(models.Model):
+    """Model that holds all of the appointments"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     schedule = models.ForeignKey('barbers.Schedule', on_delete=models.CASCADE)
     price = models.FloatField(null=True, blank=True)

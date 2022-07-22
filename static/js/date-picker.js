@@ -1,3 +1,4 @@
+// Posts user data of date
 $(document).on('input', '.date-picker', function (e) {
     e.preventDefault();
     const date = document.querySelector(".date-picker").value;
@@ -10,6 +11,7 @@ $(document).on('input', '.date-picker', function (e) {
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
         },
         success: function (data) {
+            // Re-create modal with dynamic data
             document.querySelector('.modal-content').innerHTML = data;
             document.querySelector('.date-picker').value = date
         }
@@ -17,9 +19,10 @@ $(document).on('input', '.date-picker', function (e) {
     return false;
 });
 
-
+// Posts user data of time
 $(document).on('input', '#hour-picker', function (e) {
     e.preventDefault();
+    // Get values from inputs
     const date = document.querySelector(".date-picker").value;
     const hour = document.querySelector("#hour-picker").value
 
@@ -32,6 +35,7 @@ $(document).on('input', '#hour-picker', function (e) {
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
         },
         success: function (data) {
+            // Re-create modal with dynamic data
             document.querySelector('.modal-content').innerHTML = data;
             document.querySelector('.date-picker').value = date
             document.querySelector('#hour-picker').value = hour
@@ -40,16 +44,17 @@ $(document).on('input', '#hour-picker', function (e) {
     return false;
 });
 
-
+// Fixes bug in datalist whenuser tries to delete a character
+// It deletes the entire input when user clicks on backspace
+const deleteInput = function (id) {
+    if (e.key === 'Backspace') {
+        document.querySelector(id).value = ''
+    }
+}
 $(document).on('keydown', '#hour-picker', function (e) {
-    if (e.key === 'Backspace') {
-        document.querySelector('#hour-picker').value = ''
-    }
+    deleteInput('#hour-picker')
 })
-
 $(document).on('keydown', '#barber-picker', function (e) {
-    if (e.key === 'Backspace') {
-        document.querySelector('#barber-picker').value = ''
-    }
+    deleteInput('#barber-picker')
 })
 

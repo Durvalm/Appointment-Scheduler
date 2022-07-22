@@ -33,6 +33,7 @@ class Service(models.Model):
         return self.service
 
 class Price(models.Model):
+    """Stores prices for every service"""
     value = models.FloatField(null=True)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
 
