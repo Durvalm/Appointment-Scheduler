@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from apps.saloons.models import Saloon, Appointment
 from apps.barbers.models import Barber, Schedule, Service
@@ -6,6 +7,7 @@ from django.contrib import messages
 def home(request):
     """Renders out home page"""
     return render(request, 'home.html')
+
 
 def scheduler(request):
     """Renders out scheduling page with all necessary data"""
@@ -35,6 +37,7 @@ def scheduler(request):
 
 def modal(request, saloon, id):
     """Deal with every post request inside the modal"""
+
     # Get saloon and service sent in the url
     service = get_object_or_404(Service, id=id)
     saloon_ = Saloon.objects.get(city=saloon)
@@ -127,7 +130,9 @@ def appointment_submit(request):
     # Get all the data in appointment modal
     hours = request.POST['hour']
     date = request.POST['date']
-    barber = request.POST['barber'].split()[0]
+    barber = request.POST['barber'].split()
+    barber_first_name = barber[0]
+    barber_last_name = barber[1]
     service = request.POST['service']
     saloon_city = request.POST['saloon']
     cost = request.POST['cost']
@@ -136,13 +141,14 @@ def appointment_submit(request):
     total = float(total)
 
     # Get queries and use them to create appointment
-    barber = Barber.objects.get(user__first_name=barber, saloon__city=saloon_city)
+    barber = Barber.objects.get(user__first_name=barber_first_name, user__last_name=barber_last_name, saloon__city=saloon_city)
     schedule = Schedule.objects.get(date=date, time=hours, barber=barber)
     service = Service.objects.get(id=service)
     saloon = Saloon.objects.get(city=saloon_city)
    
     # Create appointment
-    appointment = Appointment.objects.create(schedule=schedule, barber=barber, service=service, saloon=saloon, price=cost, total=total)
+    appointment = Appointment.objects.create(schedule=schedule, barber=barber, service=service,
+     saloon=saloon, price=cost, total=total, user=request.user)
     appointment.save()
 
     # Dissociate determined schedule from barber

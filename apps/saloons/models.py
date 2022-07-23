@@ -67,6 +67,6 @@ class Appointment(models.Model):
 
     def __str__(self):
         if self.user:
-            return self.user.username
+            return self.user.full_name()
         else:
             return self.saloon.city

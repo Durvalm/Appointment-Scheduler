@@ -4,6 +4,7 @@ from django.contrib.auth.models import auth
 from apps.users.models import User
 
 def login(request):
+    """Login function"""
     # gets input from html login form
     if request.method == 'POST':
         password = request.POST['password']
