@@ -57,7 +57,10 @@ class Appointment(models.Model):
     """Model that holds all of the appointments"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     schedule = models.ForeignKey('barbers.Schedule', on_delete=models.CASCADE)
+    # Without taxes
     price = models.FloatField(null=True, blank=True)
+    # With taxes
+    total = models.FloatField(null=True, blank=True)
     service = models.ForeignKey('barbers.Service', on_delete=models.CASCADE)
     saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE)
     barber = models.ForeignKey('barbers.Barber', on_delete=models.CASCADE)

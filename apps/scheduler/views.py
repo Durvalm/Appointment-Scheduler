@@ -19,6 +19,7 @@ def scheduler(request):
         try:
             chosen_saloon = request.POST['saloon']
             saloon = Saloon.objects.get(city=chosen_saloon)
+
         # Handle  submission of non-existent saloon
         except Saloon.DoesNotExist:
             messages.error(request, 'Not found, please enter one of the options given!')
@@ -40,6 +41,8 @@ def modal(request, saloon, id):
     # Initialize variables that will be sent to the frontend
     barbers = None
     cost = None
+    tax = None
+    total = None
     available_barbers = None
     available_schedule = {}
 
@@ -97,7 +100,10 @@ def modal(request, saloon, id):
                 chosen_barber = Barber.objects.get(user__first_name=barber_first_name, saloon=saloon_)
                 for price in chosen_barber.price.all():
                     if price.service == service:
-                        cost = price
+                        cost = round(price.value, 2)
+                # taxes in Florida
+                tax = round(cost * 0.07, 2)
+                total = cost + tax
             # Display message if there's no such barber
             except Barber.DoesNotExist:
                 messages.warning(request, 'Barber is not available for this service, please choose from the options.')
@@ -107,7 +113,9 @@ def modal(request, saloon, id):
         'saloon': saloon_,
         'barbers': available_barbers,
         'available_schedule': available_schedule,
-        'cost': cost
+        'cost': cost,
+        'tax': tax,
+        'total': total,
     }
 
     return render(request, 'modal.html', context)
@@ -123,7 +131,9 @@ def appointment_submit(request):
     service = request.POST['service']
     saloon_city = request.POST['saloon']
     cost = request.POST['cost']
+    total = request.POST['total']
     cost = float(cost)
+    total = float(total)
 
     # Get queries and use them to create appointment
     barber = Barber.objects.get(user__first_name=barber, saloon__city=saloon_city)
@@ -132,11 +142,12 @@ def appointment_submit(request):
     saloon = Saloon.objects.get(city=saloon_city)
    
     # Create appointment
-    appointment = Appointment.objects.create(schedule=schedule, barber=barber, service=service, saloon=saloon, price=cost)
+    appointment = Appointment.objects.create(schedule=schedule, barber=barber, service=service, saloon=saloon, price=cost, total=total)
     appointment.save()
 
     # Dissociate determined schedule from barber
     barber.schedule.remove(schedule)
     barber.save()
     
+    messages.success(request, 'Appointment was scheduled, more information was sent to you email.')
     return redirect('scheduler')

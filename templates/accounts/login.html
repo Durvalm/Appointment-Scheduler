@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section-content padding-y">
+
+    <!-- ============================ COMPONENT REGISTER   ================================= -->
+    <div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+        <article class="card-body">
+            {% include 'includes/alerts.html' %}
+            <header class="mb-4">
+                <h4 class="card-title">Login</h4>
+            </header>
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-md-12 py-1">
+                        <label>Email:</label>
+                        <input class="form-control" type="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-12 py-1">
+                        <label>Password:</label>
+                        <input class="form-control" type="password" name="password" placeholder="Enter your Password"
+                            required>
+                    </div>
+
+                </div>
+                <div class="form-group py-1">
+                    <button type="submit" class="btn btn-primary btn-block"> Login </button>
+                </div> <!-- form-group// -->
+            </form>
+
+        </article><!-- card-body.// -->
+    </div> <!-- card .// -->
+    <p class="text-center mt-4">Don't have an account? <a href="{% url 'register' %}">Register Now</a></p>
+    <br><br>
+    <!-- ============================ COMPONENT REGISTER  END.// ================================= -->
+
+
+</section>
+
+{% endblock %}

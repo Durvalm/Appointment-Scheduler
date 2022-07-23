@@ -49,8 +49,13 @@
         <!-- Display cost according to barber and service-->
         {% if cost %}
         <div class="text-center">
+            <small>Subtotal:</small>
+            <h6 class="cost">${{cost}}</h6>
+            <small>Taxes:</small>
+            <h6 class="tax">${{tax}}</h6>
             <small>Total:</small>
-            <h4 class="cost">${{cost}}</h4>
+            <h6 class="total">${{total}}</h6>
+
         </div>
 
         <!-- submit (Deal with submission in javascript) -->

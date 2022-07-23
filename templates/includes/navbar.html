@@ -10,13 +10,17 @@
         <div class="collapse navbar-collapse" id="navmenu">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a href="home" class="nav-link active">Home</a>
+                    <a href="{% url 'home' %}" class="nav-link active">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="scheduler" class="nav-link active">Book Now</a>
+                    <a href="{% url 'scheduler' %}" class="nav-link active">Book Now</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#instructors" class="nav-link active">Team</a>
+                    {% if not user.is_authenticated %}
+                    <a href="{% url 'login' %}" class="nav-link active">Login/Register</a>
+                    {% else %}
+                    <a href="{% url 'logout' %}" class="nav-link active">Logout</a>
+                    {% endif %}
                 </li>
             </ul>
         </div>

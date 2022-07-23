@@ -46,15 +46,15 @@ $(document).on('change', '#hour-picker', function (e) {
 
 // Fixes bug in datalist whenuser tries to delete a character
 // It deletes the entire input when user clicks on backspace
-const deleteInput = function (id) {
+const deleteInput = function (e, id) {
     if (e.key === 'Backspace') {
         document.querySelector(id).value = ''
     }
 }
 $(document).on('keydown', '#hour-picker', function (e) {
-    deleteInput('#hour-picker')
+    deleteInput(e, '#hour-picker')
 })
 $(document).on('keydown', '#barber-picker', function (e) {
-    deleteInput('#barber-picker')
+    deleteInput(e, '#barber-picker')
 })
 
