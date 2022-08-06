@@ -16,6 +16,14 @@ def scheduler(request):
     all_services = Service.objects.all()
     saloon = None
 
+    # If user has ordered, display messaging confirming the order
+    # Automatically update map with location retrieved from query params
+    location = request.GET.get('location', '')
+    if len(location) > 1:
+        messages.success(request, 'Your order was successful')
+        saloon = Saloon.objects.get(city=location)
+
+
     # Get desired saloon from user
     if request.method == 'POST':
         try:
@@ -83,9 +91,11 @@ def modal(request, saloon, id):
 
             # Filter barbers by available ones in determined date and hour
             # We'll use this to let user choose what barber he'd like
-            available_barbers = Barber.objects.filter(saloon=saloon_, service=service, schedule__date__in=[date], schedule__time__in=[hour]).distinct()
+            available_barbers = Barber.objects.filter(saloon=saloon_, service__in=[service], schedule__date__in=[date], schedule__time__in=[hour]).distinct()
 
             #  Display message if no barbers are available at this time
+            for i in available_barbers:
+                print(i.user.first_name, i.service.all())
             if len(available_barbers) == 0:
                 messages.warning(request, 'No barbers available for this service at this time, please try another time from the options')
 
@@ -94,13 +104,14 @@ def modal(request, saloon, id):
             # initialize variables
             hour =  request.POST['hour']
             date = request.POST['date']
-            barber = request.POST['barber']
+            barber = request.POST['barber'].split()
             # Get barber's first name to match in the database (change  it later)
-            barber_first_name = barber.split()[0]
+            barber_first_name = barber[0]
+            barber_last_name = barber[1]
 
             # Get the chosen barber by user, and display price charged for determined service 
             try:
-                chosen_barber = Barber.objects.get(user__first_name=barber_first_name, saloon=saloon_)
+                chosen_barber = Barber.objects.get(user__first_name=barber_first_name, user__last_name=barber_last_name, saloon=saloon_)
                 for price in chosen_barber.price.all():
                     if price.service == service:
                         cost = round(price.value, 2)

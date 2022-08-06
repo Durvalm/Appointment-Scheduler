@@ -30,7 +30,7 @@ $(document).on('click', '#submit', function (e) {
             },
             // If appointment is successfully created, redirect user to the scheduler window
             success: function (data) {
-                window.location.href = "scheduler";
+                window.location.href = `scheduler?location=${saloon}`;
             }
         });
         return false;

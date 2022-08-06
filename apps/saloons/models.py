@@ -29,7 +29,7 @@ class Saloon(models.Model):
         avg = 0
         if reviews['average'] is not None:
             avg = float(reviews['average'])
-        return round(avg, 2)
+        return round(avg, 1)
 
     def review_count(self):
         """Compute how many reviews the saloon has"""
