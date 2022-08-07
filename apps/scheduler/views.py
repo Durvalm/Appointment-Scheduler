@@ -1,3 +1,4 @@
+from operator import index
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from apps.saloons.models import Saloon, Appointment
@@ -168,11 +169,15 @@ def appointment_submit(request):
     barber.schedule.remove(schedule)
     barber.save()
 
-    # Send Email of appoinymrny
+    # Send Email of appointment
     subject = f'Your Appointment to Super Barbershop in {saloon_city}'
-    message = f'Hi {request.user.first_name}, thank you for relying on us, your appointment will be on day {date}, at {hours}.'
+    messages = [f'Hi {request.user.first_name}, thank you for relying on us, your appointment will be on day {date}, at {hours}.',
+                f'New appointment with {request.user.first_name} on day {date}, at {hours}.']
     email_from = settings.EMAIL_HOST_USER
-    recipient_list = ['durvalmaia.br@gmail.com', 'durvzclean@gmail.com']
-    send_mail( subject, message, email_from, recipient_list )
-    
+    recipient_list = [request.user.email, barber.user.email]
+    # Email sent to barber and to user
+    send_mail(subject, messages[0], email_from, [recipient_list[0],])
+    send_mail(subject, messages[1], email_from, [recipient_list[1],])
+
+        
     return redirect('scheduler')
