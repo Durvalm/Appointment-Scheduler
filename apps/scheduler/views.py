@@ -4,6 +4,10 @@ from apps.saloons.models import Saloon, Appointment
 from apps.barbers.models import Barber, Schedule, Service
 from django.contrib import messages
 
+# Email
+from django.conf import settings
+from django.core.mail import send_mail
+
 def home(request):
     """Renders out home page"""
     return render(request, 'home.html')
@@ -24,13 +28,13 @@ def scheduler(request):
         saloon = Saloon.objects.get(city=location)
 
 
-    # Get desired saloon from user
+    # Handle user's location request
     if request.method == 'POST':
         try:
             chosen_saloon = request.POST['saloon']
             saloon = Saloon.objects.get(city=chosen_saloon)
 
-        # Handle  submission of non-existent saloon
+        # Handle submission of non-existent saloon
         except Saloon.DoesNotExist:
             messages.error(request, 'Not found, please enter one of the options given!')
 
@@ -94,8 +98,6 @@ def modal(request, saloon, id):
             available_barbers = Barber.objects.filter(saloon=saloon_, service__in=[service], schedule__date__in=[date], schedule__time__in=[hour]).distinct()
 
             #  Display message if no barbers are available at this time
-            for i in available_barbers:
-                print(i.user.first_name, i.service.all())
             if len(available_barbers) == 0:
                 messages.warning(request, 'No barbers available for this service at this time, please try another time from the options')
 
@@ -165,6 +167,12 @@ def appointment_submit(request):
     # Dissociate determined schedule from barber
     barber.schedule.remove(schedule)
     barber.save()
+
+    # Send Email of appoinymrny
+    subject = f'Your Appointment to Super Barbershop in {saloon_city}'
+    message = f'Hi {request.user.first_name}, thank you for relying on us, your appointment will be on day {date}, at {hours}.'
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = ['durvalmaia.br@gmail.com', 'durvzclean@gmail.com']
+    send_mail( subject, message, email_from, recipient_list )
     
-    messages.success(request, 'Appointment was scheduled, more information was sent to you email.')
     return redirect('scheduler')
