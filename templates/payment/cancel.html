@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <html>
   <head>
     <title>Checkout canceled</title>
-    <link href="{% static 'css/stripe.css' %}" rel="stylesheet" type="text/css"></link>
   </head>
   <body>
-    <section>
-      <p>
-        There was a problem with your payment method!
-      </p>
-    </section>
+    <div class="container text-center p-5">
+      <h1>There was a problem with your payment method, try again!</h1>
+      <a href='{% url 'scheduler' %}'>Go back to scheduler</a>
+    </div>
   </body>
 </html>
 {% endblock %}

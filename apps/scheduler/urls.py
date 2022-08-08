@@ -6,7 +6,8 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('scheduler', views.scheduler, name='scheduler'),
     path('modal/<str:saloon>/<int:id>', views.modal, name='modal'),
-    path('appointment-submit', views.appointment_submit, name="appointment-submit"),
+    path('handle-payment', views.handle_payment, name="handle-payment"),
+    path('create-appointment', views.create_appointment, name='create-appointment'),
 
     # Redirect after payment
     path('cancel/', views.cancel, name='cancel')

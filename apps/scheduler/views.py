@@ -1,8 +1,10 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from apps.saloons.models import Saloon, Appointment
 from apps.barbers.models import Barber, Schedule, Service
+from apps.users.models import User
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 
 import stripe
 
@@ -141,7 +143,7 @@ def modal(request, saloon, id):
     return render(request, 'modal.html', context)
 
 
-def appointment_submit(request):
+def handle_payment(request):
     """Deal with appointment submission"""
 
     # Get all the data in appointment modal
@@ -150,19 +152,12 @@ def appointment_submit(request):
     barber = request.POST['barber'].split()
     barber_first_name = barber[0]
     barber_last_name = barber[1]
-    service = request.POST['service']
+    service_id = request.POST['service']
     saloon_city = request.POST['saloon']
-    cost = request.POST['cost']
-    total = request.POST['total']
-    cost = float(cost)
-    total = float(total)
+    cost = float(request.POST['cost'])
+    total = float(request.POST['total'])
 
-    # Get queries and use them to create appointment
-    barber = Barber.objects.get(user__first_name=barber_first_name, user__last_name=barber_last_name, saloon__city=saloon_city)
-    schedule = Schedule.objects.get(date=date, time=hours, barber=barber)
-    service = Service.objects.get(id=service)
-    saloon = Saloon.objects.get(city=saloon_city)
-
+    service = Service.objects.get(id=service_id)
 
     # Create Stripe appointment
     try:
@@ -179,35 +174,93 @@ def appointment_submit(request):
                     'quantity': 1,
                 },
             ],
+            metadata={
+                'hours': hours,
+                'date': date,
+                'barber_first_name': barber_first_name,
+                'barber_last_name': barber_last_name,
+                'service': service.service,
+                'saloon_city': saloon_city,
+                'cost': cost,
+                'total': total,
+            },
             mode='payment',
             success_url='http://127.0.0.1:8000' + f'/scheduler?location={saloon_city}',
             cancel_url='http://127.0.0.1:8000' + '/cancel',
         )
     except Exception as e:
         return {'error': 'error'}
-   
-    # Create appointment
-    appointment = Appointment.objects.create(schedule=schedule, barber=barber, service=service,
-     saloon=saloon, price=cost, total=total, user=request.user)
-    appointment.save()
 
-    # Dissociate determined schedule from barber
-    barber.schedule.remove(schedule)
-    barber.save()
-
-    # Send Email of appointment
-    subject = f'Your Appointment to Super Barbershop in {saloon_city}'
-    messages = [f'Hi {request.user.first_name}, thank you for relying on us, your appointment will be on day {date}, at {hours}.',
-                f'New appointment with {request.user.first_name} on day {date}, at {hours}.']
-    email_from = settings.EMAIL_HOST_USER
-    recipient_list = [request.user.email, barber.user.email]
-    # Email sent to barber and to user
-    send_mail(subject, messages[0], email_from, [recipient_list[0],])
-    send_mail(subject, messages[1], email_from, [recipient_list[1],])
 
     return JsonResponse({"redirect": checkout_session.url})
 
 
+@csrf_exempt
+def create_appointment(request):
+    """Creates appointment after payment is successful, sends email, updates database, etc"""
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+    # Construct webhook event
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+        
+    # Handle the checkout.session.completed event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+
+        # Get data from json response in stripe session
+        name = session['customer_details']['name']
+        email = session['customer_details']['email']
+        hours = session['metadata']['hours']
+        date = session['metadata']['date']
+        barber_first_name = session['metadata']['barber_first_name']
+        barber_last_name = session['metadata']['barber_last_name']
+        service = session['metadata']['service']
+        saloon_city = session['metadata']['saloon_city']
+        cost = session['metadata']['cost']
+        total = session['metadata']['total']
+
+        # Get queries and use them to create appointment
+        barber = Barber.objects.get(user__first_name=barber_first_name, user__last_name=barber_last_name, saloon__city=saloon_city)
+        schedule = Schedule.objects.get(date=date, time=hours, barber=barber)
+        service = Service.objects.get(service=service)
+        saloon = Saloon.objects.get(city=saloon_city)
+
+        user = User.objects.create(first_name=name, email=email)
+        user.save()
+
+        # Create appointment
+        appointment = Appointment.objects.create(schedule=schedule, barber=barber, service=service,
+        saloon=saloon, price=cost, total=total, user=user)
+        appointment.save()
+
+        # Dissociate determined schedule from barber
+        barber.schedule.remove(schedule)
+        barber.save()
+
+        # Send Email of appointment
+        subject = f'Your Appointment to Super Barbershop in {saloon_city}'
+        messages = [f'Hi {user.first_name}, thank you for relying on us, your appointment will be on day {date}, at {hours}.',
+                    f'New appointment with {user.first_name} on day {date}, at {hours}.']
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [user.email, barber.user.email]
+        # Email sent to barber and to user
+        send_mail(subject, messages[0], email_from, [recipient_list[0],])
+        send_mail(subject, messages[1], email_from, [recipient_list[1],])
+            
+        # Passed signature verification
+    return HttpResponse(status=200)
+
 def cancel(request):
+    """Redirect to Cancel page when payment is not fulfilled"""
     return render(request, 'payment/cancel.html')
     

@@ -13,7 +13,7 @@ $(document).on('click', '#submit', function (e) {
 
         $.ajax({
             type: "POST",
-            url: `appointment-submit`,
+            url: `handle-payment`,
             crossDomain: true,
             data: {
                 // send data to backend

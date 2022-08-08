@@ -64,6 +64,7 @@ class Appointment(models.Model):
     service = models.ForeignKey('barbers.Service', on_delete=models.CASCADE)
     saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE)
     barber = models.ForeignKey('barbers.Barber', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         if self.user:
