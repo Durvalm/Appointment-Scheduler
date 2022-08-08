@@ -1,75 +1,98 @@
 <!-- Modal -->
-<form hx-post="{{ request.path }}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content"
-    autocomplete="off">
-    <!-- modal content (updated in javascript) -->
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Pick Date & Time</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <!-- body -->
-        {% include 'includes/alerts.html' %}
-        <div class="modal-body text-center">
+<form
+  hx-post="{{ request.path }}"
+  hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'
+  class="modal-content"
+  autocomplete="off"
+>
+  <!-- modal content (updated in javascript) -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Pick Date & Time</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <!-- body -->
+    {% include 'includes/alerts.html' %}
+    <div class="modal-body text-center">
+      <!-- date input -->
+      <h5>Date:</h5>
+      <input type="date" name="date" class="date-picker form-control" />
+      <!-- display this while date has no input -->
+      {% if available_schedule|length < 1 %}
+      <small class="date-picker-message"
+        >Enter the desired appointment day above</small
+      >
 
-            <!-- date input -->
-            <h5>Date:</h5>
-            <input type="date" name="date" class="date-picker form-control">
-            <!-- display this while date has no input -->
-            {% if available_schedule|length < 1 %} <small class="date-picker-message">Enter the desired appointment
-                day
-                above</small>
+      <!-- Hour input (display if date has any schedule available) -->
+      {% else %}
+      <h5 class="py-1">Time:</h5>
+      <input
+        class="form-control hour-picker"
+        id="hour-picker"
+        required
+        list="hours"
+        type="text"
+        name="hours"
+        placeholder="Enter Here The Time You Would Like To Visit Us"
+      />
+      <!-- datalist for all hours available  -->
+      <datalist id="hours">
+        {% for hours in available_schedule %}
+        <option value="{{hours}}" name="hour-input">{% endfor %}</option>
+      </datalist>
 
-                <!-- Hour input (display if date has any schedule available) -->
-                {% else %}
-                <h5 class="py-1">Time:</h5>
-                <input class="form-control hour-picker" id="hour-picker" required list="hours" type="text" name="hours"
-                    placeholder="Enter Here The Time You Would Like To Visit Us">
-                <!-- datalist for all hours available  -->
-                <datalist id="hours">
-                    {% for hours in available_schedule %}
-                    <option value="{{hours}}" name="hour-input">
-                        {% endfor %}
-                </datalist>
-                {% endif %}
+      {% endif %}
 
-                <!-- Barber input -->
-                {% if barbers %}
-                <h5 class="py-1">Barber:</h5>
-                <input class="form-control barber-picker" id="barber-picker" required list="barbers" type="text"
-                    name="barber" placeholder="Select The Available Professional You Would Like To Work With">
-                <!-- datalist for all barbers available -->
-                <datalist id="barbers">
-                    {% for barber in barbers %}
-                    <option value="{{barber}}" name="barber-input">
-                        {% endfor %}
-                </datalist>
-                {% endif %}
-        </div>
+      <!-- Barber input -->
+      {% if barbers %}
+      <h5 class="py-1">Barber:</h5>
+      <input
+        class="form-control barber-picker"
+        id="barber-picker"
+        required
+        list="barbers"
+        type="text"
+        name="barber"
+        placeholder="Select The Available Professional You Would Like To Work With"
+      />
+      <!-- datalist for all barbers available -->
+      <datalist id="barbers">
+        {% for barber in barbers %}
+        <option value="{{barber}}" name="barber-input">{% endfor %}</option>
+      </datalist>
 
-        <!-- Display cost according to barber and service-->
-        {% if cost %}
-        <div class="text-center">
-            <small>Subtotal:</small>
-            <h6 class="cost">${{cost}}</h6>
-            <small>Taxes:</small>
-            <h6 class="tax">${{tax}}</h6>
-            <small>Total:</small>
-            <h6 class="total">${{total}}</h6>
-
-        </div>
-
-        <!-- submit (Deal with submission in javascript) -->
-        <div class="text-center p-3">
-            <a class="btn btn-success" id="submit">
-                Confirm</a>
-        </div>
-        {% endif %}
+      {% endif %}
     </div>
 
+    <!-- Display cost according to barber and service-->
+    {% if cost %}
+    <div class="text-center">
+      <small>Subtotal:</small>
+      <h6 class="cost">${{cost}}</h6>
+      <small>Taxes:</small>
+      <h6 class="tax">${{tax}}</h6>
+      <small>Total:</small>
+      <h6 class="total">${{total}}</h6>
+    </div>
+
+    <!-- submit (Deal with submission in javascript) -->
+    <div class="text-center p-3">
+      <a class="btn btn-success" id="submit"> Confirm</a>
+    </div>
+    {% endif %}
+  </div>
 </form>
 
+<script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+<script src="https://js.stripe.com/v3/"></script>
+
 <script type="text/javascript">
-    // send data to the DOM
-    var serviceId = "{{service.id}}"
-    var saloon = "{{saloon.city}}"
+  // send data to the DOM
+  var serviceId = "{{service.id}}";
+  var saloon = "{{saloon.city}}";
 </script>

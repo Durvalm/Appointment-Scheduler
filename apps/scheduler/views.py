@@ -1,13 +1,16 @@
-from operator import index
-from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from apps.saloons.models import Saloon, Appointment
 from apps.barbers.models import Barber, Schedule, Service
 from django.contrib import messages
 
+import stripe
+
 # Email
 from django.conf import settings
 from django.core.mail import send_mail
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def home(request):
     """Renders out home page"""
@@ -159,6 +162,29 @@ def appointment_submit(request):
     schedule = Schedule.objects.get(date=date, time=hours, barber=barber)
     service = Service.objects.get(id=service)
     saloon = Saloon.objects.get(city=saloon_city)
+
+
+    # Create Stripe appointment
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'usd',
+                        'unit_amount': int(total*100),
+                        'product_data': {
+                            'name': service.service
+                        },
+                    },
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url='http://127.0.0.1:8000' + f'/scheduler?location={saloon_city}',
+            cancel_url='http://127.0.0.1:8000' + '/cancel',
+        )
+    except Exception as e:
+        return {'error': 'error'}
    
     # Create appointment
     appointment = Appointment.objects.create(schedule=schedule, barber=barber, service=service,
@@ -179,5 +205,9 @@ def appointment_submit(request):
     send_mail(subject, messages[0], email_from, [recipient_list[0],])
     send_mail(subject, messages[1], email_from, [recipient_list[1],])
 
-        
-    return redirect('scheduler')
+    return JsonResponse({"redirect": checkout_session.url})
+
+
+def cancel(request):
+    return render(request, 'payment/cancel.html')
+    

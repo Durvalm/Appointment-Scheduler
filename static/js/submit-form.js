@@ -11,12 +11,10 @@ $(document).on('click', '#submit', function (e) {
     console.log(total);
     console.log('oi');
 
-    // Ask if user confirms the order
-    const confirmation = confirm(`Do you confirm the appointment in ${saloon} for $${total}?`)
-    if (confirmation) {
         $.ajax({
             type: "POST",
             url: `appointment-submit`,
+            crossDomain: true,
             data: {
                 // send data to backend
                 'cost': cost,
@@ -30,12 +28,12 @@ $(document).on('click', '#submit', function (e) {
             },
             // If appointment is successfully created, redirect user to the scheduler window
             success: function (data) {
-                window.location.href = `scheduler?location=${saloon}`;
+                window.location.href = data.redirect;
             }
         });
         return false;
     }
-});
+);
 
 // Posts user data of barber choice
 $(document).on('change', '#barber-picker', function (e) {
