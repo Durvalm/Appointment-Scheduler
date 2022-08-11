@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'apps.barbers',
     'apps.saloons',
     'apps.users',
+
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -151,3 +153,8 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
 STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
+
+# Crontab
+CRONJOBS = [
+    ('0 12,0 * * *', 'apps.scheduler.utils.cron.clean_schedule')
+]
