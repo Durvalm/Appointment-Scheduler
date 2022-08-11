@@ -6,6 +6,8 @@ from apps.users.models import User
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 
+from datetime import date as today_date
+from datetime import datetime
 import stripe
 
 # Email
@@ -73,6 +75,7 @@ def modal(request, saloon, id):
         if request.POST.get('date', False):
 
             date = request.POST['date']
+
             # Get allbarbers available in selected saloon, selected service, and selected date
             #  We will use this to retrieve every schedule available in a day for all barbers
             barbers = Barber.objects.filter(saloon=saloon_, service=service, schedule__date__in=[date]).distinct()
@@ -89,9 +92,15 @@ def modal(request, saloon, id):
             # Sort hour values to display in the frontend 
             available_schedule.sort()
 
+            # Display message if date has passed
+            if datetime.strptime(date, "%Y-%m-%d").date() < today_date.today():
+                messages.warning(request, 'Date has already passed')
+                available_schedule = {}  # "Gambiarra" to stop execution of function
+                
             #  Display message if no spots in a day
-            if len(available_schedule) == 0:
+            elif len(available_schedule) == 0:
                 messages.warning(request, 'No spots available in this day.')
+
         
         # If user is sending hour input
         if request.POST.get('hour', False):
@@ -104,6 +113,7 @@ def modal(request, saloon, id):
             available_barbers = Barber.objects.filter(saloon=saloon_, service__in=[service], schedule__date__in=[date], schedule__time__in=[hour]).distinct()
 
             #  Display message if no barbers are available at this time
+
             if len(available_barbers) == 0:
                 messages.warning(request, 'No barbers available for this service at this time, please try another time from the options')
 
@@ -147,15 +157,10 @@ def handle_payment(request):
     """Deal with appointment submission"""
 
     # Get all the data in appointment modal
-    hours = request.POST['hour']
-    date = request.POST['date']
     barber = request.POST['barber'].split()
-    barber_first_name = barber[0]
-    barber_last_name = barber[1]
     service_id = request.POST['service']
     saloon_city = request.POST['saloon']
-    cost = float(request.POST['cost'])
-    total = float(request.POST['total'])
+    total = float(request.POST['cost'])
 
     service = Service.objects.get(id=service_id)
 
@@ -175,13 +180,13 @@ def handle_payment(request):
                 },
             ],
             metadata={
-                'hours': hours,
-                'date': date,
-                'barber_first_name': barber_first_name,
-                'barber_last_name': barber_last_name,
+                'hours': request.POST['hour'],
+                'date': request.POST['date'],
+                'barber_first_name': barber[0],
+                'barber_last_name': barber[1],
                 'service': service.service,
-                'saloon_city': saloon_city,
-                'cost': cost,
+                'saloon_city': request.POST['saloon'],
+                'cost': float(request.POST['cost']),
                 'total': total,
             },
             mode='payment',
@@ -189,7 +194,7 @@ def handle_payment(request):
             cancel_url='http://127.0.0.1:8000' + '/cancel',
         )
     except Exception as e:
-        return {'error': 'error'}
+        return JsonResponse({"error": "error"})
 
 
     return JsonResponse({"redirect": checkout_session.url})
@@ -212,7 +217,7 @@ def create_appointment(request):
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
         return HttpResponse(status=400)
-        
+
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
