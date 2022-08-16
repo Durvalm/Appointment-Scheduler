@@ -24,7 +24,7 @@ $(document).on('change', '#hour-picker', function (e) {
     e.preventDefault();
     // Get values from inputs
     const date = document.querySelector(".date-picker").value;
-    const hour = document.querySelector("#hour-picker").value
+    const hour = convertTime12to24(document.querySelector("#hour-picker").value)
 
     $.ajax({
         type: "POST",
@@ -58,3 +58,19 @@ $(document).on('keydown', '#barber-picker', function (e) {
     deleteInput(e, '#barber-picker')
 })
 
+// Transforms 12h time into 24h format
+const convertTime12to24 = (time12h) => {
+    const [time, modifier] = time12h.split(' ');
+  
+    let [hours, minutes] = time.split(':');
+  
+    if (hours === '12') {
+      hours = '00';
+    }
+  
+    if (modifier === 'PM') {
+      hours = parseInt(hours, 10) + 12;
+    }
+  
+    return `${hours}:${minutes}`;
+  }

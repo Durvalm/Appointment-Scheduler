@@ -58,12 +58,8 @@
                             </small>
                             {% if saloon %}
                             <!-- htmx and JS to send dynamic data to modal -->
-                            {% if user.is_authenticated %}
                             <button hx-get="{% url 'modal' saloon.city service.id %}" hx-target="#dialog"
                                 class="badge rounded-pill btn btn-primary float-end">Book</button>
-                            {% else %}
-                            <a href="{% url 'login' %}" class="badge rounded-pill btn btn-primary float-end">Book</a>
-                            {% endif %}
                             {% endif %}
                         </li>
                         {% endfor %}

@@ -8,7 +8,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 from datetime import date as today_date
 from datetime import datetime
-from django.utils import timezone
 import stripe
 
 # Email
@@ -89,7 +88,7 @@ def modal(request, saloon, id):
                 for day in barber.schedule.all():
                     # Append available time to the set
                     if str(day.date) == date and day.time.strftime('%H:%M') not in available_schedule and day.is_available:
-                        available_schedule.append(day.time.strftime('%H:%M'))
+                        available_schedule.append(day.time.strftime('%I:%M %p'))  # Display AM PM format to users
                     else:
                         pass
             # Sort hour values to display in the frontend 
