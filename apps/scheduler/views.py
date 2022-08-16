@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from datetime import date as today_date
 from datetime import datetime
+from django.utils import timezone
 import stripe
 
 # Email
@@ -34,7 +35,9 @@ def scheduler(request):
     if len(location) > 1:
         messages.success(request, 'Your order was successful')
         saloon = Saloon.objects.get(city=location)
-
+    # If order has failed, display messaging
+    if request.GET.get('transaction'):
+        messages.warning(request, 'Try to make your appointment again')
 
     # Handle user's location request
     if request.method == 'POST':
@@ -122,14 +125,11 @@ def modal(request, saloon, id):
             # initialize variables
             hour =  request.POST['hour']
             date = request.POST['date']
-            barber = request.POST['barber'].split()
-            # Get barber's first name to match in the database (change  it later)
-            barber_first_name = barber[0]
-            barber_last_name = barber[1]
+            barber = request.POST['barber']
 
             # Get the chosen barber by user, and display price charged for determined service 
             try:
-                chosen_barber = Barber.objects.get(user__first_name=barber_first_name, user__last_name=barber_last_name, saloon=saloon_)
+                chosen_barber = Barber.objects.get(user__username=barber, saloon=saloon_)
                 for price in chosen_barber.price.all():
                     if price.service == service:
                         cost = round(price.value, 2)
@@ -155,12 +155,11 @@ def modal(request, saloon, id):
 
 def handle_payment(request):
     """Deal with appointment submission"""
-
     # Get all the data in appointment modal
-    barber = request.POST['barber'].split()
+    barber = request.POST['barber']
     service_id = request.POST['service']
     saloon_city = request.POST['saloon']
-    total = float(request.POST['cost'])
+    total = float(request.POST['total'])
 
     service = Service.objects.get(id=service_id)
 
@@ -182,8 +181,7 @@ def handle_payment(request):
             metadata={
                 'hours': request.POST['hour'],
                 'date': request.POST['date'],
-                'barber_first_name': barber[0],
-                'barber_last_name': barber[1],
+                'barber': barber,
                 'service': service.service,
                 'saloon_city': request.POST['saloon'],
                 'cost': float(request.POST['cost']),
@@ -191,7 +189,7 @@ def handle_payment(request):
             },
             mode='payment',
             success_url='http://127.0.0.1:8000' + f'/scheduler?location={saloon_city}',
-            cancel_url='http://127.0.0.1:8000' + '/cancel',
+            cancel_url='http://127.0.0.1:8000' + f'/scheduler?transaction=none',
         )
     except Exception as e:
         return JsonResponse({"error": "error"})
@@ -227,35 +225,41 @@ def create_appointment(request):
         email = session['customer_details']['email']
         hours = session['metadata']['hours']
         date = session['metadata']['date']
-        barber_first_name = session['metadata']['barber_first_name']
-        barber_last_name = session['metadata']['barber_last_name']
+        barber = session['metadata']['barber']
         service = session['metadata']['service']
         saloon_city = session['metadata']['saloon_city']
         cost = session['metadata']['cost']
         total = session['metadata']['total']
 
         # Get queries and use them to create appointment
-        barber = Barber.objects.get(user__first_name=barber_first_name, user__last_name=barber_last_name, saloon__city=saloon_city)
-        schedule = Schedule.objects.get(date=date, time=hours, barber=barber)
+        barber = Barber.objects.get(user__username=barber, saloon__city=saloon_city)
         service = Service.objects.get(service=service)
         saloon = Saloon.objects.get(city=saloon_city)
+        # transform date and hour field into datetime
+        appointment_date = datetime.strptime(f'{date} {hours}', '%Y-%m-%d %H:%M')
 
-        user = User.objects.create(first_name=name, email=email)
-        user.save()
+        # If returning user, create appointment with existing user
+        try:
+            user = User.objects.get(email=email)
+        # if new user, create User in the database
+        except:
+            user = User.objects.create(username=name, email=email)
+            user.save()
 
         # Create appointment
-        appointment = Appointment.objects.create(schedule=schedule, barber=barber, service=service,
+        appointment = Appointment.objects.create(schedule=appointment_date, barber=barber, service=service,
         saloon=saloon, price=cost, total=total, user=user)
         appointment.save()
 
         # Dissociate determined schedule from barber
+        schedule = Schedule.objects.get(date=date, time=hours, barber=barber)
         barber.schedule.remove(schedule)
         barber.save()
 
         # Send Email of appointment
         subject = f'Your Appointment to Super Barbershop in {saloon_city}'
-        messages = [f'Hi {user.first_name}, thank you for relying on us, your appointment will be on day {date}, at {hours}.',
-                    f'New appointment with {user.first_name} on day {date}, at {hours}.']
+        messages = [f'Hi {user.username}, thank you for relying on us, your appointment will be on day {date}, at {hours}.',
+                    f'New appointment with {user.username} on day {date}, at {hours}.']
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [user.email, barber.user.email]
         # Email sent to barber and to user
@@ -264,8 +268,3 @@ def create_appointment(request):
             
         # Passed signature verification
     return HttpResponse(status=200)
-
-def cancel(request):
-    """Redirect to Cancel page when payment is not fulfilled"""
-    return render(request, 'payment/cancel.html')
-    

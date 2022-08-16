@@ -11,7 +11,7 @@ class Barber(models.Model):
     price = models.ManyToManyField('Price', blank=True)
 
     def __str__(self):
-        return self.user.full_name()
+        return self.user.username
 
 
 class Schedule(models.Model):

@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 class UserManager(BaseUserManager):
     """Methods to create users"""
 
-    def create_user(self, first_name, last_name, email, password=None):
+    def create_user(self, username, email, password=None):
         """Create regular user (customer)"""
         #  Raise error if user didn't provide an email
         if not email:
@@ -14,8 +14,7 @@ class UserManager(BaseUserManager):
         # fill up user fields with input given
         user = self.model(
             email=self.normalize_email(email),
-            first_name=first_name,
-            last_name=last_name,
+            username=username,
         )
 
         # Set password, save, and return user
@@ -23,14 +22,13 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
     
-    def create_superuser(self, first_name, last_name, email, password):
+    def create_superuser(self, username, email, password):
         """Create superuser"""
         # fill up user fields with input given
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
-            first_name=first_name,
-            last_name=last_name,
+            username=username
         )
         # Set permissions
         user.is_admin = True
@@ -47,8 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     """User model for all users (Barbers, Admins, Superadmins, Customers...)"""
     # Credentials
     email = models.EmailField(max_length=255, unique=True)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+    username = models.CharField(max_length=255)
 
     # User Role
     is_staff = models.BooleanField(default=False)
@@ -62,14 +59,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_login = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = ['username']
 
     objects = UserManager()
 
-    # Additional Methods
-    def full_name(self):
-        """Gets full name"""
-        return f'{self.first_name} {self.last_name}'
 
     def __str__(self):
         """Returns email as a string"""

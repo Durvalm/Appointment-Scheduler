@@ -9,6 +9,4 @@ urlpatterns = [
     path('handle-payment', views.handle_payment, name="handle-payment"),
     path('create-appointment', views.create_appointment, name='create-appointment'),
 
-    # Redirect after payment
-    path('cancel/', views.cancel, name='cancel')
 ]

@@ -56,7 +56,7 @@ class Review(models.Model):
 class Appointment(models.Model):
     """Model that holds all of the appointments"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    schedule = models.ForeignKey('barbers.Schedule', on_delete=models.CASCADE)
+    schedule = models.DateTimeField(auto_now_add=False, blank=True)
     # Without taxes
     price = models.FloatField(null=True, blank=True)
     # With taxes
@@ -67,7 +67,4 @@ class Appointment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
-        if self.user:
-            return self.user.full_name()
-        else:
-            return self.saloon.city
+        return self.saloon.city
