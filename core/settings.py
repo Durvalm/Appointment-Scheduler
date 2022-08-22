@@ -33,18 +33,20 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    # Apps
     'apps.scheduler',
     'apps.barbers',
     'apps.saloons',
     'apps.users',
-
+    'apps.backoffice',
+    # Third parties
     'django_crontab',
 ]
 
