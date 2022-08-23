@@ -143,7 +143,7 @@ MESSAGE_TAGS = {
 }
 
 # Login required
-LOGIN_URL = "{% url 'accounts/login.html' %}"
+LOGIN_URL = "login"
 
 # Email config
 EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')

@@ -16,7 +16,10 @@ def login(request):
         # if authenticated, go to home page
         if user is not None:
             auth.login(request, user)
-            return redirect('home')
+            if user.is_barber:
+                return redirect() # Barber page (will be developed soon)
+            else:
+                return redirect('dashboard')
         # if not authenticated, return back to login page
         else:
             messages.error(request, 'credentials are not valid')
@@ -28,8 +31,7 @@ def register(request):
     """Sign Up (register) function"""
     # Gets input from html signup form
     if request.method == 'POST':
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
+        username = request.POST['username']
         email = request.POST['email']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
@@ -42,7 +44,7 @@ def register(request):
                 return redirect('register')
             else:
                 # if all information is valid, create user
-                user = User.objects.create_user(password=password1, email=email, first_name=first_name, last_name=last_name)
+                user = User.objects.create_user(password=password1, email=email, username=username)
                 user.save()
                 messages.success(request, 'You have successfully signed up!')
                 return redirect('login')

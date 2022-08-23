@@ -6,13 +6,9 @@ const myChart = new Chart(ctx, {
         datasets: [{
             label: 'Revenue',
             data: [1200, 1900, 1350, 1450, 2000, 3000, 3500],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)'
-                
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)'   
-            ],
+            borderColor: 'rgb(75, 192, 192)' ,  
+            fill: false,
+            tension: 0.1,
             borderWidth: 1
         }]
     },
@@ -24,4 +20,10 @@ const myChart = new Chart(ctx, {
         }
     }
 });
+
+document.querySelector('#overview').addEventListener('click', function(){
+    console.log(myChart.data.labels);
+    myChart.data.labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    myChart.update()
+})
 

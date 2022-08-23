@@ -8,8 +8,6 @@ $(document).on('click', '#submit', function (e) {
     // Cut off '$' from cost and total
     const cost = document.querySelector('.cost').textContent.replace('$', "").trim();
     const total = document.querySelector('.total').textContent.replace('$', "").trim();
-    console.log(total);
-    console.log('oi');
 
         $.ajax({
             type: "POST",

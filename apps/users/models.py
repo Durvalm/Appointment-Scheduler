@@ -46,6 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Credentials
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=255)
+    saloon = models.ForeignKey('saloons.Saloon', on_delete=models.CASCADE, null=True)
 
     # User Role
     is_staff = models.BooleanField(default=False)
