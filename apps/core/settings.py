@@ -15,7 +15,7 @@ import os
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -29,26 +29,30 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
-INSTALLED_APPS = [
-    # Django
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Apps
+]
+THIRD_PARTY_APPS = [
+    'django_crontab',
+]
+
+LOCAL_APPS = [
     'apps.scheduler',
     'apps.barbers',
     'apps.saloons',
     'apps.users',
-    'apps.backoffice',
-    # Third parties
-    'django_crontab',
+    'apps.backoffice',   
 ]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,12 +64,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'apps.urls'
+ROOT_URLCONF = 'apps.core.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'apps/core/templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,7 +84,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'apps.wsgi.application'
+WSGI_APPLICATION = 'apps.core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -129,7 +135,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'apps/core/static'),]
 
 
 # Default primary key field type
@@ -160,5 +166,5 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 
 # Crontab
 CRONJOBS = [
-    ('0 12,0 * * *', 'apps.scheduler.utils.cron.clean_schedule')
+    ('0 12,0 * * *', 'apps.core.cron.clean_schedule')
 ]
