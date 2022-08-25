@@ -1,7 +1,7 @@
 
 $(function() {
 
-    var start = moment().subtract(29, 'days');
+    var start = moment().subtract(30, 'days');
     var end = moment();
 
     function cb(start, end) {
@@ -25,7 +25,7 @@ $(function() {
     cb(start, end);
 });
 
-
+BASE_URL = 'http://127.0.0.1:8000'
 
 $('#daterange').daterangepicker();
 $('#reportrange').on('hide.daterangepicker', function(ev, picker) {
@@ -34,7 +34,7 @@ $('#reportrange').on('hide.daterangepicker', function(ev, picker) {
 
   $.ajax({
     type: "GET",
-    url: `http://127.0.0.1:8000/backoffice/date-filter/`,
+    url: `${BASE_URL}/backoffice/date-filter-dashboard/`,
     data: {
         'startDate': startDate,
         'endDate': endDate,

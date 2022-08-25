@@ -1,5 +1,6 @@
 {% extends 'admin/admin-base.html' %} {% load static %} {% block content %}
 
+
 <section class="dashboard" style="width: 1000px; margin-left: 40px">
   <section class="head">
     <div class="container">
@@ -76,13 +77,37 @@
 
   <section class="graph">
     <div class="container">
-      <h4 class="text-center pt-5" id="overview">Overview</h4>
-      <canvas
-        id="myChart"
-        width="400"
-        height="400"
-        style="max-width: 1000px; max-height: 450px"
-      ></canvas>
+        <h4 class="text-center pt-5 ps-4" id="overview">Overview</h4>
+
+        <div class="row" style="margin-left: 90px;">
+          <div class="col-11 d-flex justify-content-start">
+            <canvas
+              id="myChart"
+              width="400"
+              height="400"
+              style="max-width: 1000px; max-height: 450px"
+            ></canvas>
+          </div>
+
+          <div class="col" id="graph-days" style="margin-left: -45px; margin-top: 170px;">
+            <div class="row">
+              <a><span id="days-7" class="badge bg-secondary">7D</span></a>
+            </div>
+            <div class="row">
+              <a><span class="badge bg-secondary">1M</span></a>
+            </div>
+            <div class="row">
+              <a><span class="badge bg-secondary">3M</span></a>
+            </div>
+            <div class="row">
+              <a><span class="badge bg-secondary">1Y</span></a>
+            </div>
+            <div class="row">
+              <a><span class="badge bg-secondary">YTD</span></a>
+            </div>
+          </div>
+
+        </div>
     </div>
   </section>
 </section>
