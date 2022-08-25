@@ -1,5 +1,4 @@
 from datetime import timedelta, datetime
-from datetime import date as _date
 
 from django.utils import timezone
 from django.shortcuts import render
