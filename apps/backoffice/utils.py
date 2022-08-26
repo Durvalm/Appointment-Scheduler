@@ -1,5 +1,5 @@
 """Important helper functions to the views"""
-
+from datetime import date as _date
 from datetime import timedelta, datetime
 from apps.saloons.models import Appointment
 from django.utils import timezone
@@ -56,25 +56,40 @@ def display_date(num_date, day_format):
     return new_date   
 
 def graph_first_entry(request):
-    """Returns filtered data for the graph in 7 day daterange"""    
+    """returned filtered data for graph any date range"""
+    # Get days from input
+    try:
+        days = int(request.GET['days'])  # If there are days in the request, store it in the variable days
+    except:
+        days = 7  # if there's no input in the request, we are loading the page for the first time.  Return 7 days as initial value
+
+    # Don't display day and month if (days > 90)
+    display_day_month = True
+    if days > 90:
+        display_day_month = False
+
     # Get start_date and end_date of the date range
-    start_date = timezone.now() - timezone.timedelta(days=7)
+    if days == 366: # This means user input is (YTD)
+        start_date = _date(_date.today().year, 1, 1)
+    else:
+        start_date = timezone.now() - timezone.timedelta(days=days)  # if user input is anything other than YTD
     end_date = timezone.now() + timezone.timedelta(days=1)
+
     # get all appointments 
     appointments = Appointment.objects.filter(schedule__range=[start_date, end_date], saloon=request.user.saloon).order_by('schedule')
 
     # Create hash map to store days (key) and total income in each day (value)
-    seven_day_summary = {}
+    day_summary = {}
     # Iterate through all appointments
     for appointment in appointments:
         # Get numerical date by splitting __str__ method in schedule
         db_date = str(appointment.schedule).split(' ')[0]
-        date = display_date(db_date, True)  # convert numerical date to prettier version
+        date = display_date(db_date, display_day_month)  # convert numerical date to prettier version
         # If date is not in the hashmap, add date as well as and income for each transaction
-        if date not in seven_day_summary.keys():
-            seven_day_summary[date] = appointment.total
+        if date not in day_summary.keys():
+            day_summary[date] = appointment.total
         # If date was already added to the hashmap, add up income to the existing date key
         else:
-            seven_day_summary[date] += appointment.total    
+            day_summary[date] += appointment.total    
 
-    return seven_day_summary
+    return day_summary
