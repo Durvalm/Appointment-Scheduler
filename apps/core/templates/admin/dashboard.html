@@ -89,28 +89,35 @@
             ></canvas>
           </div>
 
-          <div class="col" id="graph-days" style="margin-left: -45px; margin-top: 170px;">
+          <div class="col" id="graph-range" style="margin-left: -40px; margin-top: 170px;">
             <div class="row">
-              <a><span id="days-7" class="badge bg-secondary">7D</span></a>
+              <a><span id="filter-graph-seven-days" class="badge bg-secondary">7D</span></a>
             </div>
             <div class="row">
-              <a><span class="badge bg-secondary">1M</span></a>
+              <a><span id="filter-graph-one-month" class="badge bg-secondary">1M</span></a>
             </div>
             <div class="row">
-              <a><span class="badge bg-secondary">3M</span></a>
+              <a><span id="filter-graph-three-months" class="badge bg-secondary">3M</span></a>
             </div>
             <div class="row">
-              <a><span class="badge bg-secondary">1Y</span></a>
+              <a><span id="filter-graph-one-year" class="badge bg-secondary">1Y</span></a>
             </div>
             <div class="row">
-              <a><span class="badge bg-secondary">YTD</span></a>
+              <a><span id="filter-graph-ytd" class="badge bg-secondary">YTD</span></a>
             </div>
           </div>
 
         </div>
     </div>
+    {% for month in graph_months %}
+    <p id="graph_months" style='display: none;'>{{ month }}</p>
+    {% endfor %}
   </section>
 </section>
+
+<script type="text/javascript">
+  var graphSales = {{graph_sales}};
+</script>
 
 <script type="text/javascript" src="{% static 'js/backoffice/admin-date.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/backoffice/chart.js' %}"></script>
