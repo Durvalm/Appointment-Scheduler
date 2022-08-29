@@ -1,4 +1,3 @@
-
 $(function() {
 
     var start = moment().subtract(30, 'days');

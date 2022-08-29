@@ -46,7 +46,7 @@ def date_filter_dashboard(request):
     })
 
 def date_filter_graph(request):
-    """returned filtered data for graph any date range"""    
+    """returned filtered data for graph any date range"""   
     day_summary = graph_first_entry(request)
     return JsonResponse(day_summary)
 
