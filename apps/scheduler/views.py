@@ -246,9 +246,9 @@ def create_appointment(request):
             
         # Add Total spent to user db
         if user.total_spent is not None:
-            user.total_spent + total
+            user.total_spent += float(total)
         else:
-            user.total_spent = total
+            user.total_spent = float(total)
         user.save()
 
         # Create appointment

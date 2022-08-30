@@ -1,1 +1,70 @@
-{% extends 'admin/admin-base.html' %} {% block content %} {% endblock %}
+{% extends 'admin/admin-base.html' %} 
+
+{% block content %}
+
+<section class="transactions pt-2" style="width: 1180px;">
+    <h3>Transactions</h3>
+
+    <p>Total Revenue: ${{income}} &nbsp&nbsp&nbsp&nbsp Total Transactions: {{sales}}</p>
+
+    <div class="container pt-2">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">User</th>
+            <th scope="col">Appointment</th>
+            <th scope="col">Total</th>
+            <th scope="col">Service</th>
+            <th scope="col">Barber</th>
+            <th scope="col">Appointed at</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for appointment in appointments %}
+          <tr>
+            <td scope="row">{{ forloop.counter0|add:appointments.start_index }}</th>
+            <td scope="row" >{{appointment.user.username}}</td>
+            <td scope="row">{{appointment.schedule}}</td>
+            <td scope="row">{{appointment.total}}</td>
+            <td scope="row">{{appointment.service}}</td>
+            <td scope="row">{{appointment.barber}}</td>
+            <td scope="row">{{appointment.created_at}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+
+      <nav class="mt-4" aria-label="Page navigation sample">
+        {% if appointments.has_other_pages %}
+        <ul class="pagination">
+            {% if appointments.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{appointments.previous_page_number}}">Previous</a></li>
+            {% else %}
+          <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+            {% endif %}
+      
+            {% for i in page_range %}
+                {% if appointments.number == i %}
+                  <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                {% endif %}
+            {% endfor %}
+      
+      
+          {% if appointments.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{appointments.next_page_number}}">Next</a></li>
+          {% else %}
+          <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+          {% endif %}
+        </ul>
+        {% endif %}
+      </nav>
+  </div>
+
+</section>
+
+{% endblock %}

@@ -20,7 +20,7 @@ class Saloon(models.Model):
     def sliced_address(self):
         """This method returns address sliced so you can use for geolocation in google maps,
         always remember to divide address by spaces in the database"""
-        sliced = self.adress.split(' ')
+        sliced = self.address.split(' ')
         return sliced
     
     def average_review(self):
