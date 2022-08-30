@@ -48,6 +48,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255)
     saloon = models.ForeignKey('saloons.Saloon', on_delete=models.CASCADE, null=True)
 
+    total_spent = models.FloatField(null=True)
+
     # User Role
     is_staff = models.BooleanField(default=False)
     is_barber = models.BooleanField(default=False)

@@ -242,8 +242,14 @@ def create_appointment(request):
             user = User.objects.get(email=email)
         # if new user, create User in the database
         except:
-            user = User.objects.create(username=name, email=email)
-            user.save()
+            user = User.objects.create(username=name, email=email, saloon=saloon)
+            
+        # Add Total spent to user db
+        if user.total_spent is not None:
+            user.total_spent + total
+        else:
+            user.total_spent = total
+        user.save()
 
         # Create appointment
         appointment = Appointment.objects.create(schedule=appointment_date, barber=barber, service=service,

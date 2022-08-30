@@ -2,12 +2,13 @@
 from datetime import date as _date
 from datetime import timedelta, datetime
 from apps.saloons.models import Appointment
+from apps.users.models import User
 from django.utils import timezone
 from django.db.models import Sum
 
 
 def query_date_range(request, start_date, end_date):
-    """Helper function to query the database"""
+    """Helper function to query the database for the dashboard summary"""
     # Add 1 more day to end_date (obs: data comes in str and datetime format, 
     # if it comes in str format convert it, if it comes in datetime format, just add 1 day more
     if type(end_date) == str:
@@ -19,16 +20,24 @@ def query_date_range(request, start_date, end_date):
 
     # Query total of appointments in determined date range
     appointments = Appointment.objects.filter(schedule__range=[start_date, end_date], saloon=request.user.saloon)
-    
+    # Query total of users that joined in determined date range
+    users = User.objects.filter(date_joined__range=[start_date, end_date], saloon=request.user.saloon, is_admin=False, is_barber=False)
+
     # Calculate total income in date range
     income_dict = appointments.aggregate(Sum('total'))
     income = income_dict['total__sum']
     if not income:
         income = 0
+
     # Count total of sales
     sales = appointments.count()
 
-    return income, sales
+    # Count total of new users
+    new_customers = users.count()
+
+
+    return income, sales, new_customers
+
 
 # Month names
 months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']

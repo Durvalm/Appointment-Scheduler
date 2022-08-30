@@ -1,8 +1,10 @@
 from django.urls import path
-from . import views
+from .views import dashboard, transactions
 
 urlpatterns = [
-    path('dashboard/', views.dashboard, name='dashboard'),
-    path('date-filter-dashboard/', views.date_filter_dashboard, name='date-filter-dashboard'),
-    path('date-filter-graph/', views.date_filter_graph, name='date-filter-graph'),
+    path('dashboard/', dashboard.dashboard, name='dashboard'),
+    path('date-filter-dashboard/', dashboard.date_filter_dashboard, name='date-filter-dashboard'),
+    path('date-filter-graph/', dashboard.date_filter_graph, name='date-filter-graph'),
+
+    path('transactions/' , transactions.transactions, name='transactions'),
 ]

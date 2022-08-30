@@ -9,7 +9,7 @@ class Saloon(models.Model):
     name = models.CharField(max_length=50)
     # Fields related to location
     street_number = models.CharField(max_length=10, blank=True)
-    adress = models.CharField(max_length=100, blank=True)  
+    address = models.CharField(max_length=100, blank=True)  
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
