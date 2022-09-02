@@ -2,7 +2,6 @@ from django.shortcuts import render
 from apps.saloons.models import Appointment
 from django.core.paginator import Paginator
 from django.db.models import Sum, Q
-from django.http import HttpResponse
 
 
 def transactions(request):

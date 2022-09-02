@@ -1,0 +1,52 @@
+{% extends 'admin/admin-base.html' %} {% block content %}
+
+<section class="employees" style="width: 1200px">
+  <!-- top -->
+  <div class="row pt-2">
+    <div class="col">
+      <div class="top">
+        <h3>Employees</h3>
+      </div>
+    </div>
+    <div class="col-2 pt-1">
+      <h4 class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">Add Employee</h4>
+      {% include 'admin/includes/add-modal.html' %}
+    </div>
+  </div>
+
+  <!-- cards -->
+  <div class="container pt-2">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Sold</th>
+            <th scope="col">Sales</th>
+            <th scope="col">Joined</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for barber in barbers %}
+          <tr data-bs-toggle="modal" data-bs-target="#{{barber.user.username}}" data-bs-id="{{barber.user.username}}">
+            <td scope="row">{{ forloop.counter }}</th>
+            <td scope="row" >{{barber.user.username}}</td>
+            <td scope="row" >{{barber.user.email}}</td>
+            <td scope="row" >${{barber.sold}}</td>
+            <td scope="row" >{{barber.sales}}</td>
+            <td scope="row" >{{barber.user.date_joined}}</td>
+          </tr>
+        
+          {% include 'admin/includes/edit-modal.html' %}
+          {% endfor %}
+        </tbody>
+    </table>
+  </div>
+        
+
+    
+</section>
+
+{% endblock %}

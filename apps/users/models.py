@@ -5,6 +5,23 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 class UserManager(BaseUserManager):
     """Methods to create users"""
 
+    def create_barber(self, username, email, password=None):
+        """Create regular user (customer)"""
+        #  Raise error if user didn't provide an email
+        if not email:
+            raise ValueError('User must have an email address')
+
+        # fill up user fields with input given
+        user = self.model(
+            email=self.normalize_email(email),
+            username=username,
+            is_barber=True
+        )
+        # Set password, save, and return user
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
     def create_user(self, username, email, password=None):
         """Create regular user (customer)"""
         #  Raise error if user didn't provide an email
@@ -46,8 +63,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Credentials
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=255)
-    saloon = models.ForeignKey('saloons.Saloon', on_delete=models.CASCADE, null=True)
 
+    # Other info
+    saloon = models.ForeignKey('saloons.Saloon', on_delete=models.CASCADE, null=True)
     total_spent = models.FloatField(null=True)
 
     # User Role

@@ -1,0 +1,81 @@
+<!-- Modal -->
+<form method="POST" action="{% url 'edit-employee' %}">
+  {% csrf_token %}
+<div
+  class="modal fade"
+  id="{{barber.user.username}}"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <!-- header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Employee</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- body -->
+      <div class="modal-body">
+        <div class="form-group pt-2">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            value="{{barber.user.username}}"
+            name="name"
+          />
+        </div>
+        <div class="form-group pt-2">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            value="{{barber.user.email}}"
+            name="email"
+          />
+        </div>
+        <small class="py-3">obs: if you don't wanna change the password, leave both password fields blank</small>
+        <div class="form-group pt-2">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="Enter Password"
+            name="password"
+          />
+        </div>
+        <div class="form-group pt-2">
+          <label for="password1">Confirm Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password1"
+            placeholder="Confirm Password"
+            name="password1"
+          />
+        </div>
+    
+      <div class="custom-control custom-checkbox pt-2">
+        <input type="checkbox" class="custom-control-input" id="check" name="is_admin">
+        <label class="custom-control-label" for="check">Admin Permission</label><br>
+        <small>This allows employee to see the dashboard</small>
+      </div>
+    </div>
+    <!-- footer -->
+      <div class="modal-footer">
+        <div class="container">
+        <div class="row">
+            <div class="col-7"><a href="{% url 'delete-employee' id=barber.user.id %}" onclick="return confirm('This will delete the employee and all of his records, are you sure?')" 
+                type="button" class="btn btn-danger">Delete Employee</a></div>
+            <div class="col-5"><button type="submit" class="btn btn-primary">Save changes</button></div>
+        </div>
+    
+    </div>
+  </div>
+</div>
+</form>

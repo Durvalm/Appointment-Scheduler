@@ -1,6 +1,7 @@
+from django.db.models import Sum
 from django.db import models
 from apps.users.models import User
-from apps.saloons.models import Saloon
+from apps.saloons.models import Saloon, Appointment
 
 class Barber(models.Model):
     """Model for barbers who work in the saloons"""
@@ -12,6 +13,21 @@ class Barber(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def sales(self):
+        """Returns how many sales the barber performed"""
+        appointments = Appointment.objects.filter(barber=self)
+        count = appointments.count()
+        return count
+    
+    def sold(self):
+        """Returns how much dollars barber has made"""
+        appointments = Appointment.objects.filter(barber=self)
+        income_dict = appointments.aggregate(Sum('total'))
+        income = income_dict['total__sum']
+        if not income:
+            income = 0
+        return round(income, 2)
 
 
 class Schedule(models.Model):
