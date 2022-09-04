@@ -25,26 +25,29 @@
             <th scope="col">Sold</th>
             <th scope="col">Sales</th>
             <th scope="col">Joined</th>
+            <th scope="col"></th>
           </tr>
         </thead>
 
         <tbody>
           {% for barber in barbers %}
-          <tr data-bs-toggle="modal" data-bs-target="#{{barber.user.username}}" data-bs-id="{{barber.user.username}}">
+            <tr>
             <td scope="row">{{ forloop.counter }}</th>
             <td scope="row" >{{barber.user.username}}</td>
             <td scope="row" >{{barber.user.email}}</td>
             <td scope="row" >${{barber.sold}}</td>
             <td scope="row" >{{barber.sales}}</td>
             <td scope="row" >{{barber.user.date_joined}}</td>
-          </tr>
-        
+            <td scope="row" data-bs-toggle="modal" data-bs-target="#{{barber.user.username}}" data-bs-id="{{barber.user.username}}">
+              <button class="btn btn-primary btn-sm">Edit</button></td>
+            </tr>
           {% include 'admin/includes/edit-modal.html' %}
           {% endfor %}
         </tbody>
     </table>
   </div>
         
+
 
     
 </section>

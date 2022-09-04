@@ -1,7 +1,6 @@
 from django.db import models
 from django.db.models import Avg, Count
-from apps.users.models import User
-
+from apps.users.models import User, Admin
 
 class Saloon(models.Model):
     """Model that takes care of each saloon/franchise"""
@@ -13,6 +12,7 @@ class Saloon(models.Model):
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
+    admin = models.ForeignKey(Admin, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name

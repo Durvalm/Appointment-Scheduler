@@ -1,0 +1,58 @@
+<form method="POST" action="{% url 'edit-host-email' %}">
+    {% csrf_token %}
+    <div
+      class="modal fade"
+      id="store-email"
+      tabindex="-1"
+      aria-labelledby="add-modal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- header -->
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Store Email</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <!-- body -->
+          <div class="modal-body">
+            <h5>Important</h5>
+            <small>- This is used to manage the store's email</small><br>
+            <small>- Responsible for sending appointment confirmation to customers</small><br>
+            <small>- If you want to change email or secure code,</small><br>
+            <small>- Click in the link for the <a href="www.google.com">tutorial</a></small>
+        
+            <div class="form-group pt-2">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                value="{{request.user.admin.host_email}}"
+                name="email"
+              />
+            </div>
+            <div class="form-group pt-2">
+              <label for="password">Secure App Code</label>
+              <input
+                type="text"
+                class="form-control"
+                id="code"
+                placeholder="Enter Secure Code"
+                name="code"
+              />
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>

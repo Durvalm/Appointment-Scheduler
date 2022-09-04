@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from apps.saloons.models import Saloon, Appointment
 from apps.barbers.models import Barber, Schedule, Service
 from apps.users.models import User
+from apps.core.email_host import get_email_host
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 
@@ -115,7 +116,6 @@ def modal(request, saloon, id):
             available_barbers = Barber.objects.filter(saloon=saloon_, service__in=[service], schedule__date__in=[date], schedule__time__in=[hour]).distinct()
 
             #  Display message if no barbers are available at this time
-
             if len(available_barbers) == 0:
                 messages.warning(request, 'No barbers available for this service at this time, please try another time from the options')
 
@@ -261,15 +261,20 @@ def create_appointment(request):
         barber.schedule.remove(schedule)
         barber.save()
 
+        # Trandform hour field in AM/PM format
+        hours = datetime.strptime(hours, '%H:%M')
+        hours = hours.strftime("%I:%M %p")
+
         # Send Email of appointment
+        connection = get_email_host(saloon)
         subject = f'Your Appointment to Super Barbershop in {saloon_city}'
         messages = [f'Hi {user.username}, thank you for relying on us, your appointment will be on day {date}, at {hours}.',
                     f'New appointment with {user.username} on day {date}, at {hours}.']
-        email_from = settings.EMAIL_HOST_USER
+        email_from = saloon.admin.host_email
         recipient_list = [user.email, barber.user.email]
         # Email sent to barber and to user
-        send_mail(subject, messages[0], email_from, [recipient_list[0],])
-        send_mail(subject, messages[1], email_from, [recipient_list[1],])
+        send_mail(subject, messages[0], email_from, [recipient_list[0],], connection=connection)
+        send_mail(subject, messages[1], email_from, [recipient_list[1],], connection=connection)
             
-        # Passed signature verification
+    # Passed signature verification
     return HttpResponse(status=200)

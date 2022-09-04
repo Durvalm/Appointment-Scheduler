@@ -47,10 +47,6 @@ def edit_employee(request):
     username = request.POST['name']
     password = request.POST['password']
     password1 = request.POST['password1']
-    is_admin = request.POST.get('is_admin', False)
-
-    if is_admin == 'on':
-        is_admin = True
 
     # If password matchs, proceed
     if password == password1:
@@ -62,7 +58,6 @@ def edit_employee(request):
             # if all information is valid, create user
             user.email = email
             user.username = username
-            user.is_admin = is_admin
             if password:
                 user.set_password(password)
                 user.save()

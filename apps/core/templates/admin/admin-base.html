@@ -70,14 +70,11 @@
 
   <body>
     <div class="container-fluid">
-    <div class="row flex-nowrap">
-
-    {% include 'includes/sidebar.html' %}
-    
-    {% block content %}
-    {% endblock content %}
-
-    </div>
+      <div class="row flex-nowrap">
+        {% include 'admin/includes/sidebar.html' %} 
+        {% block content %} 
+        {% endblock content %}
+      </div>
     </div>
   </body>
 

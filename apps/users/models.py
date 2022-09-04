@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-
 class UserManager(BaseUserManager):
     """Methods to create users"""
 
@@ -96,5 +95,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     def has_module_perms(self, add_label):
         return True
 
+class Admin(models.Model):
+    """User model for admin"""
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    host_email = models.EmailField(max_length=255, unique=True)
+    host_passcode = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.user.email
 
 
