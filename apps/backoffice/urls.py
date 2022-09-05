@@ -2,7 +2,7 @@ from django.urls import path
 from .views.dashboard import dashboard, date_filter_dashboard, date_filter_graph
 from .views.transactions import transactions
 from .views.employees import employees, add_employee, edit_employee, delete_employee
-from .views.settings import settings, edit_host_email
+from .views.settings import settings, edit_host_email, manage_permissions, edit_permissions, edit_profile
 
 urlpatterns = [
     path('dashboard/', dashboard, name='dashboard'),
@@ -17,6 +17,10 @@ urlpatterns = [
     path('delete-employee/<int:id>/', delete_employee, name='delete-employee'),
 
     path('settings/', settings, name='settings'),
+    path('manage-permissions/', manage_permissions, name='manage-permissions'),
+    path('edit-permissions/<int:id>/', edit_permissions, name='edit-permissions'),
+
     path('edit-host-email/', edit_host_email, name='edit-host-email'),
+    path('edit-profile', edit_profile, name='edit-profile'),
 
 ]

@@ -1,0 +1,56 @@
+{% extends 'admin/admin-base.html' %}
+{% block content %} 
+
+<section class="settings" style="width: 1200px; background-color: #DADADA;">
+    <div class="container pt-3">
+
+        <div class="card mx-auto" style="width: 36rem;">
+            <div class="card-body">
+                <ul class="list-group list-group-flush" style="list-style-type: none;">
+
+                <li class="card-title">
+                    <div style="display: flex; justify-content: space-between;">
+                    <h4>Manage Permissions</h4>
+                    <a  href="{% url 'settings' %}"
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></a>
+                </div>
+
+                    <small>- If the employee is staff, he has permission to access the dashboard's home page and transactions.</small><br>
+                    <small>- He won't have access to the employees and settings page
+                         and won't be able to change any sensitive information as you are the only one with such permission.</small><br>
+                    <small>- To change someone's permission, just click on his name</small>
+                    
+                </li>
+
+                
+                <li class="card-text pt-2">
+                    <h5>Employees</h5>
+                    <hr>
+                </li>
+               
+                {% for barber in barbers %}
+                {% if barber.user.is_staff == True %}
+                    <a href="{% url 'edit-permissions' id=barber.id %}" class="text-dark text-decoration-none" style="font-size: 14px;">
+                        <span><h6>{{barber}}</h6> <p>Role: Staff</p></span> 
+                    </a>
+                {% else %}
+                    <a href="{% url 'edit-permissions' id=barber.id %}" class="text-dark text-decoration-none" style="font-size: 14px;">
+                        <span><h6>{{barber}}</h6> <p>Role: Non-Staff</p></span>  
+                    </a>
+                {% endif %}
+                {% endfor %} 
+                
+                </ul>
+            </div>
+        </div>
+
+        
+            
+    </div>
+</section>
+
+{% endblock content %}

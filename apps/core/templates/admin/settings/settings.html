@@ -1,0 +1,51 @@
+{% extends 'admin/admin-base.html' %}
+{% block content %} 
+
+<section class="settings" style="width: 1200px; background-color: #DADADA;">
+    <div class="container pt-3">
+
+        <div class="card mx-auto mt-2" style="width: 36rem;">
+            <div class="card-body">
+                <ul class="list-group list-group-flush" style="list-style-type: none;">
+
+                <li class="card-title">
+                    <h4>Profile</h4>
+                </li>
+                <a class="list-group-item card-text" style="font-size: 18px;" data-bs-toggle="modal" data-bs-target="#edit-profile">
+                    Edit Profile
+                </a>
+                <a class="list-group-item card-text" style="font-size: 18px;" data-bs-toggle="modal" data-bs-target="#change-password">
+                    Change Password
+                </a>
+                <a href="{% url 'logout' %}" class="list-group-item card-text" 
+                style="font-size: 18px;" onclick="return confirm('Are you sure you want to logout?')">
+                    Logout
+                </a>
+
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="card mx-auto mt-2" style="width: 36rem;">
+            <div class="card-body">
+                <ul class="list-group list-group-flush" style="list-style-type: none;">
+                <li class="card-title">
+                    <h4>Account</h4>
+                </li>
+                <a href="{% url 'manage-permissions' %}" class="list-group-item card-text" style="font-size: 18px;">
+                    Manage Permissions
+                </a>
+                <a class="list-group-item card-text" style="font-size: 18px;" data-bs-toggle="modal" data-bs-target="#store-email">
+                    Store Email 
+                </a>
+                {% include 'admin/settings/email-change.html' %}
+                </ul>
+            </div>
+        </div>          
+    </div>
+    {% include 'admin/settings/edit-profile.html' %}
+    {% include 'admin/settings/change-password.html' %}
+</section>
+
+{% endblock content %}
