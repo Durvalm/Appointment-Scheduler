@@ -2,10 +2,10 @@
 from datetime import date as _date
 from datetime import timedelta, datetime
 from apps.saloons.models import Appointment
-from apps.barbers.models import Service
+from apps.barbers.models import Service, Barber
 from apps.users.models import User
 from django.utils import timezone
-from django.db.models import Sum, Count
+from django.db.models import Sum
 
 
 def query_date_range(request, start_date, end_date):
@@ -105,7 +105,7 @@ def graph_first_entry(request):
     return day_summary
 
 
-def income_per_service():
+def income_per_service(request):
     """Get income and per each service"""
     # Get all services
     services = Service.objects.all()
@@ -114,15 +114,39 @@ def income_per_service():
 
     # Loop through each service
     for service in services:
-        appointments = Appointment.objects.filter(service=service)  # Query all appointments for each service
+        appointments = Appointment.objects.filter(service=service, saloon=request.user.saloon)  # Query all appointments for each service
         sales = appointments.count()  # Get total sales count for each service
-        sum_dict = Appointment.objects.filter(service=service).aggregate(Sum('total'))  # Get total income brought in by each service
+        sum_dict = Appointment.objects.filter(service=service, saloon=request.user.saloon).aggregate(Sum('total'))  # Get total income brought in by each service
         total = sum_dict['total__sum']
 
         # Append Service, income, and sales to the dictionary
         service_summary[service.service] = {}
         service_summary[service.service]['income'] = round(total, 2)
         service_summary[service.service]['sales'] = sales
-        
+
     return service_summary
+
+def income_per_employee(request):
+    """Get income and per each employee"""
+    # Get all barbers
+    barbers = Barber.objects.all()
+    # Create dictionaty to store barbers and their stats
+    barber_summary = {}
+
+    # Loop through each barber
+    for barber in barbers:
+        appointments = Appointment.objects.filter(barber=barber, saloon=request.user.saloon)  # Query all appointments for each barber
+        sales = appointments.count()  # Get total sales count for each service
+        sum_dict = Appointment.objects.filter(barber=barber, saloon=request.user.saloon).aggregate(Sum('total'))  # Get total income brought in by each service
+        total = sum_dict['total__sum']
+
+        # Append Service, income, and sales to the dictionary
+        barber_summary[barber.user.username] = {}
+        if total is None:
+            barber_summary[barber.user.username]['income'] = 0
+        else:
+            barber_summary[barber.user.username]['income'] = round(total, 2)
+        barber_summary[barber.user.username]['sales'] = sales
+        
+    return barber_summary
 

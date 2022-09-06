@@ -104,7 +104,7 @@
   </section>
 
 
-  <section class="services pt-4 pb-5">
+  <section class="services pt-4">
     <h4 class="text-center" style="margin-left: -90px;">Services</h4>
     <div class="container">
         <div class="row pt-3">
@@ -126,6 +126,30 @@
             {% endfor %}
         </div>
     </div>
+</section>
+
+<section class="services pt-4 pb-5">
+  <h4 class="text-center" style="margin-left: -90px;">Employees</h4>
+  <div class="container">
+      <div class="row pt-3">
+          {% for barber, value in employee_summary.items %}
+          <div class="col-11 col-md-4 g-0">
+              <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">{{barber}}</h5>
+                    {% for k, v in value.items %}
+                    {% if k == 'income' %}
+                    <p class="card-text">{{k}}: ${{v}}</p>
+                    {% else %}
+                    <p class="card-text">{{k}}: {{v}}</p>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+          </div>
+          {% endfor %}
+      </div>
+  </div>
 </section>
 
 

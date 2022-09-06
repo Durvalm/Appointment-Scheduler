@@ -2,8 +2,10 @@
 from django.utils import timezone
 from django.shortcuts import render
 from django.http import JsonResponse
+
+from apps.backoffice.views.employees import employees
 # App imports
-from ..services import query_date_range, graph_first_entry, income_per_service
+from ..services import query_date_range, graph_first_entry, income_per_service, income_per_employee
 from ..permissions import admin_member_required
  
 
@@ -18,9 +20,10 @@ def dashboard(request):
     graph_months = list(day_summary.keys())
     graph_sales = list(day_summary.values())    
 
-    # Sservices summary
-    service_summary = income_per_service()
-
+    # Services summary
+    service_summary = income_per_service(request)
+    # Employee summary
+    employee_summary = income_per_employee(request)
 
     context = {
         'user': request.user,
@@ -29,7 +32,8 @@ def dashboard(request):
         'new_customers': new_customers,
         'graph_months': graph_months,
         'graph_sales': graph_sales,
-        'service_summary': service_summary
+        'service_summary': service_summary,
+        'employee_summary': employee_summary,
     }
     return render(request, 'admin/dashboard.html', context)
     
