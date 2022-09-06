@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.shortcuts import render
 from django.http import JsonResponse
 # App imports
-from ..utils import query_date_range, graph_first_entry
+from ..services import query_date_range, graph_first_entry, income_per_service
 from ..permissions import admin_member_required
  
 
@@ -13,20 +13,23 @@ def dashboard(request):
     # Query the database to get data from all appointments from last 30 days
     income, sales, new_customers = query_date_range(request, timezone.now() - timezone.timedelta(days=29), timezone.now())  # This goes to the summary
 
-    # get data for the graph's first entry in dict
-    graph_dict = graph_first_entry(request)
-    # Separate dictionary data in lists
-    graph_months = list(graph_dict.keys())
-    graph_sales = list(graph_dict.values())
-    months = list(graph_months)
+    # Graph's first entry 
+    day_summary = graph_first_entry(request)
+    graph_months = list(day_summary.keys())
+    graph_sales = list(day_summary.values())    
+
+    # Sservices summary
+    service_summary = income_per_service()
+
 
     context = {
         'user': request.user,
         'income': round(income, 2),
         'sales': sales,
         'new_customers': new_customers,
-        'graph_months': months,
-        'graph_sales': graph_sales
+        'graph_months': graph_months,
+        'graph_sales': graph_sales,
+        'service_summary': service_summary
     }
     return render(request, 'admin/dashboard.html', context)
     

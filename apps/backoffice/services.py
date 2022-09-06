@@ -2,9 +2,10 @@
 from datetime import date as _date
 from datetime import timedelta, datetime
 from apps.saloons.models import Appointment
+from apps.barbers.models import Service
 from apps.users.models import User
 from django.utils import timezone
-from django.db.models import Sum
+from django.db.models import Sum, Count
 
 
 def query_date_range(request, start_date, end_date):
@@ -99,6 +100,29 @@ def graph_first_entry(request):
             day_summary[date] = appointment.total
         # If date was already added to the hashmap, add up income to the existing date key
         else:
-            day_summary[date] += appointment.total    
+            day_summary[date] += appointment.total
 
     return day_summary
+
+
+def income_per_service():
+    """Get income and per each service"""
+    # Get all services
+    services = Service.objects.all()
+    # Create dictionaty to store services and their stats
+    service_summary = {}
+
+    # Loop through each service
+    for service in services:
+        appointments = Appointment.objects.filter(service=service)  # Query all appointments for each service
+        sales = appointments.count()  # Get total sales count for each service
+        sum_dict = Appointment.objects.filter(service=service).aggregate(Sum('total'))  # Get total income brought in by each service
+        total = sum_dict['total__sum']
+
+        # Append Service, income, and sales to the dictionary
+        service_summary[service.service] = {}
+        service_summary[service.service]['income'] = round(total, 2)
+        service_summary[service.service]['sales'] = sales
+        
+    return service_summary
+

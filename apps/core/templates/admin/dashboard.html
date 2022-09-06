@@ -5,22 +5,11 @@
 
 
 <div class="col-auto flex-column" style="width: 1200px;">
-  <section class="head">
-    <div class="container">
-      <div class="row text-center">
-
-        <!-- headers -->
-        <div class="col-5 py-3">
-          <h3 id="dashboard">Dashboard</h3>
-        </div>
-
-        <div class="col-7 py-3">
-          <h3>{{ user.saloon.city }}</h3>
-        </div>
-
-      </div>
-    </section>
-
+  <div class="text-center pt-3 pb-2" style="margin-left: -90px">
+    <h4>Dashboard</h4>
+      <small> {{user.saloon.city}}</small>
+  </div>
+    
     <section class="calendar">
       <div class="container">
       <div class="row pt-2 text-center">
@@ -98,24 +87,51 @@
               <a><span id="366" class="badge bg-secondary">YTD</span></a>
           </div>
         </div>
-      
+      </div>
+
+      <div class="container">     
         <div class="row">
-          <div class="col-11" style="position: absolute; margin-left: -10px;">
+          <div class="col-11" style=" margin-left: 0px;">
             <canvas
               id="myChart"
               width="400"
               height="400"
               style="max-width: 1100px; max-height: 450px;"
             ></canvas>
+          </div>
         </div>
-      </div>
-    </div>
+      </div> 
   </section>
+
+
+  <section class="services pt-4 pb-5">
+    <h4 class="text-center" style="margin-left: -90px;">Services</h4>
+    <div class="container">
+        <div class="row pt-3">
+            {% for service, value in service_summary.items %}
+            <div class="col-11 col-md-4 g-0">
+                <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">{{service}}</h5>
+                      {% for k, v in value.items %}
+                      {% if k == 'income' %}
+                      <p class="card-text">{{k}}: ${{v}}</p>
+                      {% else %}
+                      <p class="card-text">{{k}}: {{v}}</p>
+                      {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
 
     {% for month in graph_months %}
     <p id="graph_months" style='display: none;'>{{ month }}</p>
     {% endfor %}
-</section>
 </div>
 
   <script type="text/javascript">

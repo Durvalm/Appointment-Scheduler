@@ -25,5 +25,4 @@ urlpatterns = [
     path('edit-profile/', edit_profile, name='edit-profile'),
     path('change-password/', change_password, name='change-password'),
 
-
 ]
