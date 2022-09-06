@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.hashers import check_password
 from apps.users.models import Admin, User
 from apps.barbers.models import Barber
 
@@ -53,15 +54,40 @@ def edit_permissions(request, id):
 
 def edit_profile(request):
     """Edit admin's email and username"""
-    email = request.POST['email']
-    username = request.POST['username']
+    if request.method == 'POST':
+        # POST request from user (get data)
+        email = request.POST['email']
+        username = request.POST['username']
+        
+        user = User.objects.filter(email=email)
 
-    user = User.objects.get(email=email)
+        # if inputted email already exists in the db, throw an error
+        if user.exists():
+            messages.error(request, 'Email already exists, try another!')
+        # if inputted email doesn't exist in the database, edit profile.
+        else:
+            request.user.email = email
+            request.user.username = username
+            request.user.save()
+            messages.success(request, 'Successfully changed!')
+        return redirect('settings')
 
-    if not user:
-        request.user.email = email
-        request.user.username = username
+def change_password(request):
+    """Edit admin's password"""
+    current_password = request.POST['current-password']
+    new_password = request.POST['password1']
+    repeat_password = request.POST['password2']
+
+    # Check inputted current password with the actual one from the db
+    match_check = check_password(current_password, request.user.password)
+    if match_check:
+        # check if both password entries match
+        if new_password == repeat_password:
+            request.user.set_password(new_password)
+            request.user.save()
+            messages.success(request, 'Password has been changed, login again.')
+        else:
+            messages.error(request, "Passwords don't match")
     else:
-        messages.success(request, 'Email already exists, try another!')
-
-    return redirect('edit-profile')
+        messages.error(request, 'Current password is not valid.')
+    return redirect('login')
