@@ -6,7 +6,8 @@
 <section">
     <div class="container pt-5 ">
         {% include 'includes/alerts.html' %}
-        <form method="POST" action="{% url 'scheduler' %}" autocomplete="off">
+        {% if not is_single %}
+        <form method="POST" action="{% url 'search-saloon' %}" autocomplete="off">
             {% csrf_token %}
             <div class="input-group">
                 <input class="form-control" id="loc" required list="saloons" type="text" name="saloon"
@@ -15,11 +16,13 @@
                 <datalist id="saloons">
                     {% for saloon in all_saloons %}
                     <option value="{{saloon.city}}" name="saloon1">
-                        {% endfor %}
+                    {% endfor %}
                 </datalist>
                 <button class="btn btn-primary">Submit</button>
             </div>
         </form>
+        {% else %}
+        {% endif %}
     </div>
     </section>
 
@@ -58,14 +61,14 @@
                             </small>
                             {% if saloon %}
                             <!-- htmx and JS to send dynamic data to modal -->
-                            <button hx-get="{% url 'modal' saloon.city service.id %}" hx-target="#dialog"
+                            <button hx-get="{% url 'modal' service.id %}" hx-target="#dialog"
                                 class="badge rounded-pill btn btn-primary float-end">Book</button>
                             {% endif %}
                         </li>
                         {% endfor %}
                         <!-- Placeholder for the modal -->
                         <div id="modal" class="modal fade">
-                            <div id="dialog" class="modal-dialog" hx-target="this"></div>
+                            <div id="dialog" class="modal-dialog"></div>
                         </div>
                     </ul>
                 </div>

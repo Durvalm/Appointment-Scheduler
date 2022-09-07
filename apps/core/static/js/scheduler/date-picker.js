@@ -5,7 +5,7 @@ $(document).on('change', '.date-picker', function (e) {
 
     $.ajax({
         type: "POST",
-        url: `modal/${saloon}/${serviceId}`,
+        url: `http://127.0.0.1:8000/handle-date-input/`,
         data: {
             'date': date,
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
@@ -28,17 +28,16 @@ $(document).on('change', '#hour-picker', function (e) {
 
     $.ajax({
         type: "POST",
-        url: `modal/${saloon}/${serviceId}`,
+        url: `http://127.0.0.1:8000/handle-hour-input/`,
         data: {
             'hour': hour,
-            'date': date,
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
         },
         success: function (data) {
             // Re-create modal with dynamic data
             document.querySelector('.modal-content').innerHTML = data;
             document.querySelector('.date-picker').value = date
-            document.querySelector('#hour-picker').value = hour
+            document.querySelector('.hour-picker').value = hour
         }
     });
     return false;

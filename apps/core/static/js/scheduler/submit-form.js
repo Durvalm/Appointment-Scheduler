@@ -11,7 +11,7 @@ $(document).on('click', '#submit', function (e) {
 
         $.ajax({
             type: "POST",
-            url: `handle-payment`,
+            url: `http://127.0.0.1:8000/handle-payment/`,
             crossDomain: true,
             data: {
                 // send data to backend
@@ -20,8 +20,6 @@ $(document).on('click', '#submit', function (e) {
                 'hour': hour,
                 'date': date,
                 'barber': barber,
-                'service': serviceId,
-                'saloon': saloon,
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
             },
             // If appointment is successfully created, redirect user to the scheduler window
@@ -44,7 +42,7 @@ $(document).on('change', '#barber-picker', function (e) {
 
     $.ajax({
         type: "POST",
-        url: `modal/${saloon}/${serviceId}`,
+        url: `http://127.0.0.1:8000/handle-barber-input/`,
         data: {
             // send data to the backend
             'barber': barber,

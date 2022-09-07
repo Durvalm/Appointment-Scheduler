@@ -79,6 +79,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.scheduler.context_processors.all_saloons',
+                'apps.scheduler.context_processors.all_services',
             ],
         },
     },
