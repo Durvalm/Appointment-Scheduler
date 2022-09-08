@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import HttpResponse
 from apps.barbers.models import Barber
-from apps.saloons.models import Saloon
 from apps.users.models import User
 
 def employees(request):

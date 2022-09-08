@@ -1,11 +1,7 @@
 # Django imports
 from django.core.cache import cache
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import render
 from django.contrib import messages
-from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
-from django.core.mail import send_mail
 
 # Project imports
 from apps.saloons.models import Saloon

@@ -20,9 +20,26 @@
         <li class="nav-item">
           <a href="{% url 'scheduler' %}" class="nav-link active">Book Now</a>
         </li>
+
+        {% if not request.user.is_authenticated %}
         <li class="nav-item">
-          <a href="{% url 'dashboard' %}" class="nav-link active">Dashboard</a>
+          <a href="{% url 'login' %}" class="nav-link active">Login</a>
         </li>
+        {% else %}
+        {% if request.user.is_admin or request.user.is_staff %}
+        <li class="nav-item">
+          <a href="{% url 'dashboard' %}" class="nav-link active">Admin</a>
+        </li>
+        {% if request.user.is_barber %}
+        <li class="nav-item">
+          <a href="{% url 'employee-dashboard' %}" class="nav-link active">Barber</a>
+        </li>
+        {% endif %}
+        {% endif %}
+        <li class="nav-item">
+          <a href="{% url 'logout' %}" class="nav-link active">Logout</a>
+        </li>
+        {% endif %}
       </ul>
     </div>
   </div>

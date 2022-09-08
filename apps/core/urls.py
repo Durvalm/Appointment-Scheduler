@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('apps.scheduler.urls')),
     path('accounts/', include('apps.users.urls')),
     path('backoffice/', include('apps.backoffice.urls')),
+    path('employee/', include('apps.barbers.urls')),
 ]

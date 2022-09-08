@@ -11,7 +11,7 @@
             {% csrf_token %}
             <div class="input-group">
                 <input class="form-control" id="loc" required list="saloons" type="text" name="saloon"
-                    placeholder="Enter Here the Location You Would Like To Visit">
+                    placeholder="Enter Here the Location You Would Like To Visit" onkeydown="return false;">
                 <!-- datalist with all saloons -->
                 <datalist id="saloons">
                     {% for saloon in all_saloons %}
@@ -54,7 +54,7 @@
                         <!-- display all services and open modal with dynamic information related to the saloon and service -->
                         {% for service in all_services %}
                         <li id="service-name-{{service.id}}" class=" list-group-item list-group-item-action">
-                            🔥{{service.service}}💈
+                            🔥{{service.name}}💈
                             <br>
                             <small id="service-description-{{service.id}}" class="text-muted">
                                 {{service.description}}

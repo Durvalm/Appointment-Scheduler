@@ -1,0 +1,75 @@
+<!-- Modal -->
+<form method="POST" action="{% url 'add-appointment' %}">
+    {% csrf_token %}
+    <div
+      class="modal fade"
+      id="create-appointment"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- header -->
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Appointment</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <!-- body -->
+          <div class="modal-body">
+            <small>- When someone hasn't made the appointment online.</small><br>
+            <small>- You can create one here after the service.</small>
+            <div class="form-group pt-2">
+              <label for="name">Customer Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="Enter Customer Name"
+                name="name"
+                autocomplete="off"
+                required
+              />
+            </div>
+            <div class="form-group pt-2">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Enter Customer Email"
+                name="email"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-group pt-2">
+              <label for="service">Service</label>
+              <input
+                type="text"
+                class="form-control"
+                id="service"
+                placeholder="Enter Service"
+                name="service"
+                autocomplete="off"
+                required list="services"
+                required
+                onkeydown="return false;"
+              />
+            </div>
+            <datalist id="services">
+                {% for service in request.user.barber.service.all %}
+                <option value="{{service.name}}" name="service_item">
+                {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  

@@ -42,16 +42,16 @@ class Schedule(models.Model):
 
 class Service(models.Model):
     """Stores all the services the business provides"""
-    service = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
     description = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
-        return self.service
+        return self.service.name
 
 class Price(models.Model):
     """Stores prices for every service"""
     value = models.FloatField(null=True)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='service')
 
     def __str__(self):
         return str(self.value)

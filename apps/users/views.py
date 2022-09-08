@@ -16,10 +16,7 @@ def login(request):
         # if authenticated, go to home page
         if user is not None:
             auth.login(request, user)
-            if user.is_barber:
-                return redirect() # Barber page (will be developed soon)
-            else:
-                return redirect('dashboard')
+            return redirect('home')
         # if not authenticated, return back to login page
         else:
             messages.error(request, 'credentials are not valid')

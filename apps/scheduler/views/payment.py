@@ -35,7 +35,7 @@ def handle_payment(request):
                         'currency': 'usd',
                         'unit_amount': int(total*100),
                         'product_data': {
-                            'name': service.service
+                            'name': service.name
                         },
                     },
                     'quantity': 1,
@@ -45,7 +45,7 @@ def handle_payment(request):
                 'hours': request.POST['hour'],
                 'date': request.POST['date'],
                 'barber': barber,
-                'service': service.service,
+                'service': service.name,
                 'saloon': saloon.city,
                 'cost': float(request.POST['cost']),
                 'total': total,
@@ -83,7 +83,7 @@ def create_appointment(request):
 
         # Get queries and use them to create appointment
         barber = Barber.objects.get(user__username=barber, saloon__city=saloon)
-        service = Service.objects.get(service=service)
+        service = Service.objects.get(service__name=service)
         saloon = Saloon.objects.get(city=saloon)
 
         # transform date and hour field into datetime

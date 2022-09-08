@@ -120,9 +120,9 @@ def income_per_service(request):
         total = sum_dict['total__sum']
 
         # Append Service, income, and sales to the dictionary
-        service_summary[service.service] = {}
-        service_summary[service.service]['income'] = round(total, 2)
-        service_summary[service.service]['sales'] = sales
+        service_summary[service.name] = {}
+        service_summary[service.name]['income'] = round(total, 2)
+        service_summary[service.name]['sales'] = sales
 
     return service_summary
 

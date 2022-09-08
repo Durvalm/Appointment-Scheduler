@@ -61,10 +61,14 @@ class Appointment(models.Model):
     price = models.FloatField(null=True, blank=True)
     # With taxes
     total = models.FloatField(null=True, blank=True)
+
     service = models.ForeignKey('barbers.Service', on_delete=models.CASCADE)
     saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE)
     barber = models.ForeignKey('barbers.Barber', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    is_paid = models.BooleanField(default=False)
+    is_completed = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.saloon.city
