@@ -24,8 +24,9 @@
                 <th scope="col">Schedule</th>
                 <th scope="col">Total</th>
                 <th scope="col">Service</th>
-                <th scope="col">Completed</th>
-                <th scope="col">Paid</th>
+                <!-- <th scope="col">Completed</th>
+                <th scope="col">Paid</th> -->
+
               </tr>
             </thead>
     
@@ -36,7 +37,7 @@
                 <td scope="row">{{appointment.schedule}}</td>
                 <td scope="row">${{appointment.total}}</td>
                 <td scope="row">{{appointment.service.name}}</td>
-                {% if appointment.is_completed %}
+                <!-- {% if appointment.is_completed %}
                 <td scope="row"><a href="{% url 'complete-appointment' id=appointment.id %}" class="btn btn-success btn-sm">Yes</a></td>
                 {% else %}
                 <td scope="row"><a href="{% url 'complete-appointment' id=appointment.id %}" class="btn btn-warning btn-sm">No</a></td>
@@ -46,7 +47,7 @@
                 <td scope="row"><a href="{% url 'pay-appointment' id=appointment.id %}" class="btn btn-success btn-sm">Yes</a></td>
                 {% else %}
                 <td scope="row"><a href="{% url 'pay-appointment' id=appointment.id %}" class="btn btn-warning btn-sm">No</a></td>
-                {% endif %}
+                {% endif %} -->
               </tr>
               {% endfor %}
             </tbody>

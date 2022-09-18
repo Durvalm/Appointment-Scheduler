@@ -70,7 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # User Role
     is_staff = models.BooleanField(default=False)
     is_barber = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
 

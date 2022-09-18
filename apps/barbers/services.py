@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from apps.saloons.models import Appointment
 
 def change_status(id, status):
@@ -18,3 +19,26 @@ def change_status(id, status):
             appointment.is_paid = True
 
     appointment.save()
+
+def convert_weekday_to_number(weekday):
+    """Convert weekday ex: 'tuesday' to number '3' """
+    num_day = ''
+    if weekday == 'Monday':
+        num_day = 1
+    elif weekday == 'Tuesday':
+        num_day = 2
+    elif weekday == 'Wednesday':
+        num_day = 3
+    elif weekday == 'Thursday':
+        num_day = 4
+    elif weekday == 'Friday':
+        num_day = 5
+    elif weekday == 'Saturday':
+        num_day = 6
+    elif weekday == 'Sunday':
+        num_day = 7
+    else:
+        num_day = None
+    return num_day
+        
+        
