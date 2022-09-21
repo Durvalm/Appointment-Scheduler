@@ -5,7 +5,7 @@ class BarberAdmin(admin.ModelAdmin):
     list_display = ['user', 'saloon']
 
 class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ['date', 'time']
+    list_display = ['date', 'time', 'id']
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ['service', 'description']

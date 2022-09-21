@@ -56,6 +56,7 @@ def display_date(num_date, day_format):
         del(splitted_date[0])
         # Create new string with month name
         new_date = f'{month_name} {splitted_date[1]}'
+        
 
     elif not day_format:
         # Take Day out of numerical date

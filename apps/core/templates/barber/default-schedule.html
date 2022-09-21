@@ -1,0 +1,81 @@
+{% extends 'barber/base.html' %}
+
+{% block content %}
+
+{% include 'includes/alerts.html' %}
+
+<!-- Main Section Start -->
+<div class="main-section pt-5">
+    <div class="page-section account-header buyer-logged-in">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <div class="user-dashboard loader-holder">
+                        <div class="user-holder">
+                            <h4 class="text-uppercase">Default Schedule</h4>
+							<hr>
+                          
+                            <table class="table opening_hours" style="width: 500px; border: none !important;">
+                                <tbody>
+                                    {% for schedule in working_schedule %}
+                                        <tr>
+                                            <td><b>{{ schedule }}</b></td>
+                                            <td>{% if schedule.is_closed %}Closed{% else %}{{ schedule.from_hour }} - {{ schedule.to_hour }}{% endif %}</td>
+                                            <td><a href="{% url 'delete-default-schedule' id=schedule.id %}" class="remove_hour" data-url="">Remove</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <br>
+
+                            <form action="{% url 'add-default-schedule' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <input class="form-control" required list="days" type="text" name="day"
+                                            placeholder="Select Day">
+                                        <!-- datalist with all saloons -->
+                                        <datalist id="days">
+                                            {% for day in days %}
+                                            <option value="{{day.1}}">
+                                            {% endfor %}
+                                        </datalist>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input class="form-control" id="" required list="start_hours" type="text" name="start_hour"
+                                            placeholder="Open Hour">
+                                        <!-- datalist with all saloons -->
+                                        <datalist id="start_hours">
+                                            {% for hour in hours %}
+                                            <option value="{{hour.0}}">
+                                            {% endfor %}
+                                        </datalist>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input class="form-control" id="" required list="end_hours" type="text" name="end_hour"
+                                            placeholder="Closing Hour">
+                                        <!-- datalist with all saloons -->
+                                        <datalist id="end_hours">
+                                            {% for hour in hours %}
+                                            <option value="{{hour.0}}">
+                                            {% endfor %}
+                                        </datalist>
+                                    </div>
+                                    
+                                    <div class="col-md-2">
+                                        <input class="btn btn-success" type="submit" value="Add Hours">
+                                    </div>
+                                </div>
+                            </form>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main Section End -->
+
+{% endblock %}

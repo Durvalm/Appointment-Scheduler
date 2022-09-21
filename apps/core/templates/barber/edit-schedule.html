@@ -1,0 +1,71 @@
+{% extends 'barber/base.html' %}
+
+{% block content %}
+
+<!-- header -->
+<section class="edit-schedule pt-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-3 mt-1">
+                <a href="{% url 'schedule' %}" type="button" class="btn-close" aria-label="Close"></a>
+            </div>
+            <div class="col-5">
+                <h4 class="text-uppercase">{{date}} ({{weekday}})</h4>
+            </div>
+            <div class="col-4">            
+                <a href="{% url 'delete-all-schedule-hours' %}" class="btn btn-danger mb-3" onclick="return confirm('Click OK if you dont wanna work this day')">
+                     Delete All Hours</a>
+            </div>
+            <hr>
+        </div>
+        <div class="row">
+            <small">Delete all hours if you don't want to work this day</small>
+            
+            <!-- add hour -->
+            <div class="pt-5 pb-5">
+            <h5>Add Hour</h5>
+            <form action="{% url 'add-schedule-hour' %}" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <input class="form-control" id="" required list="hours" type="text" name="hour"
+                            placeholder="Select Hour">
+                        <!-- datalist with all saloons -->
+                        <datalist id="hours">
+                            {% for hour in hours %}
+                            <option value="{{hour.0}}">
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                    <div class="col-md-2">
+                        <input class="btn btn-success" type="submit" value="Add Hour">
+                    </div>
+                </div>
+            </form>
+            </div>
+            
+            <!-- all hours -->
+            <h5>Manage Current Hours</h5>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Hour</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for schedule, id in schedules.items %}
+                  <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{schedule}}</td>
+                    <td><a href="{% url 'delete-schedule-hour' id=id %}" class="btn btn-danger btn-sm">Delete</a></td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

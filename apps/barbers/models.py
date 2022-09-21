@@ -1,4 +1,4 @@
-from datetime import time
+from datetime import time, datetime
 from django.db.models import Sum
 from django.db import models
 from apps.users.models import User
@@ -14,6 +14,7 @@ class Barber(models.Model):
 
     def __str__(self):
         return self.user.username
+
 
     def sales(self):
         """Returns how many sales the barber performed"""
@@ -37,9 +38,13 @@ class Schedule(models.Model):
     time = models.TimeField(auto_now=False, blank=True, null=True)
     is_available = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ('-date', '-time')
+        unique_together = ('date', 'time')
+
     def __str__(self):
         return f'{self.date} {self.time}'
-
+   
 
 class Service(models.Model):
     """Stores all the services the business provides"""
@@ -47,7 +52,7 @@ class Service(models.Model):
     description = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
-        return self.service.name
+        return self.name
 
 class Price(models.Model):
     """Stores prices for every service"""
@@ -59,14 +64,14 @@ class Price(models.Model):
 
 
 DAYS = [
-    (1, ("Monday")),
-    (2, ("Tuesday")),
-    (3, ("Wednesday")),
-    (4, ("Thursday")),
-    (5, ("Friday")),
-    (6, ("Saturday")),
-    (7, ("Sunday")),
-]
+    (0, ("Monday")),
+    (1, ("Tuesday")),
+    (2, ("Wednesday")),
+    (3, ("Thursday")),
+    (4, ("Friday")),
+    (5, ("Saturday")),
+    (6, ("Sunday")),
+] 
 
 HOUR_OF_DAY_24 = [(time(h, m).strftime('%I:%M %p'), time(h, m).strftime('%I:%M %p')) for h in range(0, 24) for m in (0, 30)]
 class WorkingSchedule(models.Model):
@@ -78,7 +83,42 @@ class WorkingSchedule(models.Model):
 
     class Meta:
         ordering = ('day', '-from_hour')
-        unique_together = ('barber', 'day', 'from_hour', 'to_hour')
+        unique_together = ('barber', 'day')
 
     def __str__(self):
         return self.get_day_display()
+
+    def get_all_hours(self, instance):
+        """Gets all hours in range (from_hour:to_hour) in determined day"""
+        # Transform string hours in datetime (AM, PM)
+        from_hour = datetime.strptime(instance.from_hour, '%I:%M %p')
+        to_hour = datetime.strptime(instance.to_hour, '%I:%M %p')
+
+        # Converts from_hour to time object
+        start = datetime.time(from_hour)
+        end = datetime.time(to_hour) 
+        TIME_FORMAT = "%H:%M" # Format for hours and minutes
+        times = [] # List of times 
+        while start <= end:
+            times.append(start)
+            # If minute is 0, set it to 30
+            if start.minute == 0: 
+                start = start.replace(minute=30) 
+            # if minute is 30, set it to 0 and pass to next hout
+            elif start.minute == 30:
+                start = start.replace(minute=0) 
+                if start.hour != 23:
+                    start = start.replace(hour=start.hour + 1)
+                else:
+                    start = start.replace(hour=0)
+
+            # Break if all hours have been found
+            is_equal = start == end
+            if is_equal is True:
+                times.append(start)
+                break
+        # Uses list comprehension to format the objects and return list
+        times = [x.strftime(TIME_FORMAT) for x in times] 
+        return times
+
+

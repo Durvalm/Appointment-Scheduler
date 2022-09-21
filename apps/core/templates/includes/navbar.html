@@ -30,11 +30,11 @@
         <li class="nav-item">
           <a href="{% url 'dashboard' %}" class="nav-link active">Admin</a>
         </li>
+        {% endif %}
         {% if request.user.is_barber %}
         <li class="nav-item">
           <a href="{% url 'employee-dashboard' %}" class="nav-link active">Barber</a>
         </li>
-        {% endif %}
         {% endif %}
         <li class="nav-item">
           <a href="{% url 'logout' %}" class="nav-link active">Logout</a>

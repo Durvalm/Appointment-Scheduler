@@ -41,7 +41,7 @@ def register(request):
                 return redirect('register')
             else:
                 # if all information is valid, create user
-                user = User.objects.create_user(password=password1, email=email, username=username)
+                user = User.objects.create_user(password=password1, email=email, username=username, is_active=True)
                 user.save()
                 messages.success(request, 'You have successfully signed up!')
                 return redirect('login')
