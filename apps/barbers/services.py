@@ -67,7 +67,6 @@ def add_delete_barber_schedules(request, working_schedule, action):
     """Add or Delete schedules related to barber in 14 days"""
     # Get all hours in created working_schedule
     hour_lst = working_schedule.get_all_hours(working_schedule)
-    print(hour_lst)
     
     # Remove schedules for 14 days
     for day in range(15):
@@ -77,18 +76,21 @@ def add_delete_barber_schedules(request, working_schedule, action):
         # Check what day in the week the current day is
         current_weekday = current_day.weekday()
 
-        # Add schedules for every hour in list
+        # Add or remove schedules for every hour in list
         for hour in hour_lst:
-            print(hour)
             if current_weekday == working_schedule.day:
+                # Remove
                 if action == 'delete':
                     try:
-                        schedule = Schedule.objects.get(date=current_day, time=hour)
+                        schedule = Schedule.objects.get(date=current_day, time=hour, barber=request.user.barber)
                         request.user.barber.schedule.remove(schedule)
                     except:
                         continue
+                # Add
                 elif action == 'add':
+                    print(hour, current_day, hour)
                     schedule, created = Schedule.objects.get_or_create(date=current_day, time=hour, is_available=True)
+                    print(schedule)
                     request.user.barber.schedule.add(schedule)
 
 

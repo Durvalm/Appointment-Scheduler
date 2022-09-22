@@ -34,7 +34,7 @@ def edit_schedule(request, id):
     # Get pretty version of date
     date = display_pretty_datetime(schedule.__str__())
     # Get weekday of date
-    weekday = schedule.date.today().strftime('%A')
+    weekday = schedule.date.strftime('%A')
     
     context = {
         'schedules': hour_dict,
@@ -52,7 +52,7 @@ def delete_schedule_hour(request, id):
     schedule_date = schedule.date
 
     # Delete schedule
-    request.user.barber.schedule.delete()
+    request.user.barber.schedule.remove(schedule)
 
     # Get new schedule to get redirect id
     new_schedule = Schedule.objects.filter(date=schedule_date, barber=request.user.barber).first()

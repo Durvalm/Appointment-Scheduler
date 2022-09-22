@@ -12,7 +12,15 @@
                 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                     <div class="user-dashboard loader-holder">
                         <div class="user-holder">
-                            <h4 class="text-uppercase">Default Schedule</h4>
+                            <div class="row">
+                            <div class="col-1">
+                                <a href="{% url 'schedule' %}" type="button" class="btn-close" aria-label="Close"></a>
+                            </div>
+                            <div class="col">
+                                <h4 class="text-uppercase">Default Schedule</h4>
+                            </div>
+                            </div>
+
 							<hr>
                           
                             <table class="table opening_hours" style="width: 500px; border: none !important;">

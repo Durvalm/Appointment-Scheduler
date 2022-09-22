@@ -1,16 +1,18 @@
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 from django.utils import timezone
 from apps.barbers.models import Schedule, Barber, WorkingSchedule
+
+_timezone = timezone.localtime(timezone.now())
 
 def clean_schedule():
     """Deletes schedules from past dates from the database"""
     schedules = Schedule.objects.all()
 
     for schedule in schedules:
-        if schedule.date < timezone.now().date():
+        if schedule.date < datetime.now().date():
             schedule.delete()
-        elif schedule.date == timezone.now().date():
-            if schedule.time < timezone.now().time():
+        elif schedule.date == datetime.now().date():
+            if schedule.time < datetime.now().time():
                 schedule.delete()
 
 def add_schedule():
@@ -18,7 +20,7 @@ def add_schedule():
     barbers = Barber.objects.all()
 
     # Figure out what weekday is the day after 14 days
-    day = timezone.now().date() + timedelta(days=14)
+    day = datetime.now().date() + timedelta(days=14)
     weekday = day.weekday()
 
     # Iterate through all barbers
