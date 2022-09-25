@@ -57,3 +57,29 @@ def logout(request):
     auth.logout(request)
     messages.success(request, 'You are logged out.')
     return redirect('login')
+
+
+def edit_user(request):
+    """Change account's email and username"""
+    if request.method == 'POST':
+        # POST request from user (get data)
+        email = request.POST['email']
+        username = request.POST['username']
+        
+        user = User.objects.get(email=email)
+
+        # if inputted email already exists in the db, throw an error
+        if user:
+            if user.email != request.user.email:
+                messages.error(request, 'Email already exists, try another!')
+            else:
+                request.user.email = email
+                request.user.username = username
+                request.user.save()
+                messages.success(request, 'Successfully changed!')
+        # if inputted email doesn't exist in the database, edit profile.
+        if not user:
+            request.user.email = email
+            request.user.username = username
+            request.user.save()
+            messages.success(request, 'Successfully changed!')

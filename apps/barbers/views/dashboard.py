@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.contrib import messages
@@ -9,7 +10,7 @@ from apps.scheduler.services import create_user
 def employee_dashboard(request):
     """Render employee dashboard on the screen"""
     # Get first 10 entries of appointments made with request.barber
-    appointments = Appointment.objects.filter(barber=request.user.barber).order_by('-schedule')[:10:1]
+    appointments = Appointment.objects.filter(barber=request.user.barber, schedule__date=datetime.now().date()).order_by('-schedule')[:10:1]
 
     context = {
         'appointments': appointments,

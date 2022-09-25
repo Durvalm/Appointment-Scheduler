@@ -3,9 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from apps.users.models import Admin, User
 from apps.barbers.models import Barber
-
-from apps.core.email_host import get_email_host
-from django.core.mail import get_connection, send_mail
+from apps.users.views import edit_user
 
 
 def settings(request):
@@ -54,23 +52,8 @@ def edit_permissions(request, id):
 
 def edit_profile(request):
     """Edit admin's email and username"""
-    if request.method == 'POST':
-        # POST request from user (get data)
-        email = request.POST['email']
-        username = request.POST['username']
-        
-        user = User.objects.filter(email=email)
-
-        # if inputted email already exists in the db, throw an error
-        if user.exists():
-            messages.error(request, 'Email already exists, try another!')
-        # if inputted email doesn't exist in the database, edit profile.
-        else:
-            request.user.email = email
-            request.user.username = username
-            request.user.save()
-            messages.success(request, 'Successfully changed!')
-        return redirect('settings')
+    edit_user(request)
+    return redirect('settings')
 
 def change_password(request):
     """Edit admin's password"""
@@ -86,8 +69,11 @@ def change_password(request):
             request.user.set_password(new_password)
             request.user.save()
             messages.success(request, 'Password has been changed, login again.')
+            return redirect('login')
         else:
             messages.error(request, "Passwords don't match")
+            return redirect('settings')
     else:
         messages.error(request, 'Current password is not valid.')
-    return redirect('login')
+        return redirect('settings')
+

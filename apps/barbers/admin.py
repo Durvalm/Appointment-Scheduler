@@ -8,7 +8,7 @@ class ScheduleAdmin(admin.ModelAdmin):
     list_display = ['date', 'time', 'id']
 
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['service', 'description']
+    list_display = ['name', 'description']
 
 class PriceAdmin(admin.ModelAdmin):
     list_display = ['value', 'service']

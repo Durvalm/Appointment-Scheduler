@@ -1,0 +1,53 @@
+<!-- Modal -->
+<form method="POST" action="{% url 'add-service' %}">
+    {% csrf_token %}
+    <div
+      class="modal fade"
+      id="add-service"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- header -->
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Service</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <!-- body -->
+          <div class="modal-body">
+            <div class="form-group pt-2">
+              <label for="service">Service</label>
+              <input
+                type="text"
+                class="form-control"
+                id="service"
+                name="service"  
+                placeholder="Enter service name"              
+              />
+            </div>
+            <div class="form-group pt-2">
+              <label for="price">Price</label>
+              <input
+                type="text"
+                class="form-control"
+                id="price"
+                placeholder="Enter price"
+                name="price"
+              />
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Add</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>

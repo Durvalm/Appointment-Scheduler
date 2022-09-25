@@ -4,6 +4,7 @@ from .views.dashboard import (employee_dashboard, complete_appointment,
 from .views.schedule import (delete_all_schedule_hours, schedule, default_schedule, add_default_schedule, 
                              delete_default_schedule, edit_schedule, delete_schedule_hour,
                              add_schedule_hour, delete_all_schedule_hours)
+from .views.settings import barber_settings, delete_service, manage_services, edit_service, delete_service, add_service
 
 urlpatterns = [
     path('dashboard/', employee_dashboard, name='employee-dashboard'),
@@ -20,4 +21,10 @@ urlpatterns = [
     path('default-schedule/', default_schedule, name='default-schedule'),
     path('add-default-schedule/', add_default_schedule, name='add-default-schedule'),
     path('delete-default-schedule/<int:id>/', delete_default_schedule, name='delete-default-schedule'),
+
+    path('settings/', barber_settings, name='barber-settings'),
+    path('manage-services/', manage_services, name='manage-services'),
+    path('edit-service/<int:id>/', edit_service, name='edit-service'),
+    path('delete-service/<int:id>/', delete_service, name='delete-service'),
+    path('add-service/', add_service, name='add-service'),
 ]

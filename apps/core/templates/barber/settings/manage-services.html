@@ -1,0 +1,52 @@
+{% extends 'barber/base.html' %}
+{% block content %} 
+
+<body class="settings" style="background-color: #DADADA">
+    <div class="container pt-3">
+
+        <div class="card mx-auto" style="width: 36rem;">
+            <div class="card-body">
+                <ul class="list-group list-group-flush" style="list-style-type: none;">
+
+                <li class="card-title">
+                    <div style="display: flex; justify-content: space-between;">
+                    <h4>Manage Services</h4>
+                    <a  href="{% url 'barber-settings' %}"
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></a>
+                </div> 
+                <hr>
+                </li>
+
+                <div style="display: flex; justify-content: space-between;">
+                <div>
+                {% for price in prices %}
+                    <a data-bs-toggle="modal" data-bs-target="#{{price.service.name}}" data-bs-id="{{price.service.name}}"
+                     class="text-decoration-none" style="font-size: 14px;">
+                        <span style="display: flex;"><h6>{{price.service.name}}:</h6>
+                            <p style="margin-left: 5px;">${{price.value}}</p>
+                        </span> 
+                    </a>           
+                {% include 'barber/settings/edit-service.html' %}
+                {% endfor %}
+                </div>
+                <div>
+                    <a data-bs-toggle="modal" data-bs-target="#add-service" data-bs-id=""
+                    href="{% url 'add-service' %}" class="btn btn-success" style="margin-top: -20px;">Add Service</a>
+                    {% include 'barber/settings/add-service.html' %}
+                </div>
+                </div> 
+                
+                </ul>
+            </div>
+        </div>
+
+        
+            
+    </div>
+</body>
+
+{% endblock content %}
