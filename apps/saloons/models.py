@@ -43,7 +43,7 @@ class Saloon(models.Model):
 class Review(models.Model):
     """Model that creates a review"""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE)
+    saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE, null=True)
     review = models.TextField(max_length=500, blank=True)
     rating = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)

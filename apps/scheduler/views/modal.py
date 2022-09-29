@@ -24,7 +24,7 @@ def scheduler(request):
     # If there's only one saloon, retrieve it
     is_single = is_single_saloon()
     if is_single:
-        saloon = Saloon.objects.first().first()
+        saloon = Saloon.objects.first()
         cache.set('saloon', saloon)
 
     # If there's multiple saloons get cached saloon

@@ -6,7 +6,7 @@ from apps.saloons.models import Saloon, Appointment
 
 class Barber(models.Model):
     """Model for barbers who work in the saloons"""
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE, null=True)
     schedule = models.ManyToManyField('Schedule', blank=True)
     service = models.ManyToManyField('Service', blank=True)
