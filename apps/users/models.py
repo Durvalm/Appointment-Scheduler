@@ -14,14 +14,15 @@ class UserManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),
             username=username,
-            is_barber=True
+            is_barber=True,
+            is_active=True
         )
         # Set password, save, and return user
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, username, email, password=None):
+    def create_user(self, username, email, password=None, **kwargs):
         """Create regular user (customer)"""
         #  Raise error if user didn't provide an email
         if not email:
@@ -31,6 +32,7 @@ class UserManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),
             username=username,
+            is_active=True,
         )
 
         # Set password, save, and return user

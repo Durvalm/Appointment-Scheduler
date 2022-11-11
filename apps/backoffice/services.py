@@ -122,8 +122,9 @@ def income_per_service(request):
 
         # Append Service, income, and sales to the dictionary
         service_summary[service.name] = {}
-        service_summary[service.name]['income'] = round(total, 2)
         service_summary[service.name]['sales'] = sales
+        if total is not None:
+            service_summary[service.name]['income'] = round(total, 2)
 
     return service_summary
 

@@ -1,3 +1,4 @@
+
 <!-- Modal -->
 <form method="POST" action="{% url 'add-employee' %}">
   {% csrf_token %}
@@ -5,14 +6,13 @@
     class="modal fade"
     id="add-modal"
     tabindex="-1"
-    aria-labelledby="add-modal"
     aria-hidden="true"
   >
     <div class="modal-dialog">
       <div class="modal-content">
         <!-- header -->
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Employee</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Add Store</h5>
           <button
             type="button"
             class="btn-close"

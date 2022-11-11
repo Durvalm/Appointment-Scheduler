@@ -1,0 +1,55 @@
+{% extends 'admin/admin-base.html' %}
+{% block content %} 
+
+<section class="settings" style="width: 1200px; background-color: #DADADA;">
+    <div class="container pt-3">
+        {% include 'includes/alerts.html' %}
+
+        <div class="card mx-auto" style="width: 36rem;">
+            <div class="card-body">
+                <ul class="list-group list-group-flush" style="list-style-type: none;">
+
+                <li class="card-title">
+                    <div style="display: flex; justify-content: space-between;">
+                    <h4>Manage Stores</h4>
+                    <a  href="{% url 'settings' %}"
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></a>
+                    </div>
+                </li>
+
+                
+                <li class="card-text pt-2">
+                    <div style="display: flex; justify-content: space-between;">
+                        <h5>Stores</h5>
+                        <a href="{% url 'add-saloon' %}" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#add-store">Add</a>
+                    </div>
+                    {% include 'admin/includes/add-store.html' %}
+                    <hr>
+                </li>
+               
+                {% for saloon in saloons %}
+                    <div style="display: flex; justify-content: space-between;">
+                        <h6>{{saloon}}</h6> 
+                        <a href="{% url 'delete-saloon' saloon.id %}" style="color: red;"
+                        onclick="return confirm('Are you sure you want to delete the saloon? All data about this saloon will be lost.')">delete</a>
+                    </div>
+                {% endfor %} 
+                
+                </ul>
+
+                <div class="pt-3">
+                <small style="padding-top: 10px;">- Obs: if you delete a store, all the data of it will be deleted forever.</small>     
+                </div>
+            </div>
+        </div>
+
+        
+            
+    </div>
+</section>
+
+{% endblock content %}

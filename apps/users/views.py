@@ -10,8 +10,15 @@ def login(request):
         password = request.POST['password']
         email = request.POST['email']
 
+        print(password)
+        print(email)
+        user = User.objects.get(email=email)
+        print(user.email)
+        print(user.password)
+
         # authenticates if username and password are matching (using email as username)
         user = auth.authenticate(email=email, password=password)
+        print(user)
 
         # if authenticated, go to home page
         if user is not None:

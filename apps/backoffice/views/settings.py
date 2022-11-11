@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from apps.users.models import Admin, User
 from apps.barbers.models import Barber
+from apps.saloons.models import Saloon
 from apps.users.views import edit_user
 
 
@@ -76,4 +77,40 @@ def change_password(request):
     else:
         messages.error(request, 'Current password is not valid.')
         return redirect('settings')
+
+def manage_stores(request):
+    """Renders manage_stores page to the admin"""
+    saloons = Saloon.objects.all()
+
+    context = {
+        'saloons': saloons,
+    }
+
+    return render(request, 'admin/settings/stores.html', context)
+
+def add_saloon(request):
+    """Adds store to admin"""
+    name = request.POST['name']
+    street_number = request.POST['street-number']
+    address = request.POST['address']
+    city = request.POST['city']
+    state = request.POST['state']
+    country = request.POST['country']
+
+    saloon = Saloon.objects.create(name=name, street_number=street_number, address=address, city=city, state=state, country=country, admin=request.user.admin)
+    saloon.save()
+
+    messages.success(request, 'Saloon added successfully')
+    return redirect('manage-stores')
+
+def delete_saloon(request, id):
+    """Deletes saloon forever"""
+
+    saloon = Saloon.objects.get(id=id)
+    saloon.delete()
+    messages.success(request, 'Saloon removed successfully')
+    return redirect('manage-stores')
+
+
+
 
