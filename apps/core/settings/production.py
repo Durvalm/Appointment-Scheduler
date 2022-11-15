@@ -8,4 +8,4 @@ DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
 print(DATABASES)
 
 DEBUG = True
-ALLOWED_HOSTS = ['superbarber.site', 'saloon.lol', 'https://superbarberapp.herokuapp.com', 'superbarberapp.herokuapp.com']
+ALLOWED_HOSTS = ['www.superbarber.site', 'saloon.lol', 'https://superbarberapp.herokuapp.com', 'superbarberapp.herokuapp.com']
