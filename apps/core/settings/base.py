@@ -12,33 +12,40 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
-# Application definition
+PUBLIC_SCHEMA_NAME = 'public'
 
-DJANGO_APPS = [
+# Application definition
+SHARED_APPS = [
+    'django_tenants',
+    'apps.clients',
+    'apps.users',
+    'apps.scheduler',
+    'apps.barbers',
+    'apps.saloons',
+    'apps.backoffice',
+    # DJANGO_APPS
+    'django.contrib.contenttypes',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+TENANT_APPS = SHARED_APPS[2:]
+
 THIRD_PARTY_APPS = [
     'django_crontab',
 ]
 
-LOCAL_APPS = [
-    'apps.scheduler',
-    'apps.barbers',
-    'apps.saloons',
-    'apps.users',
-    'apps.backoffice',   
-]
+INSTALLED_APPS = SHARED_APPS + THIRD_PARTY_APPS + [app for app in TENANT_APPS if app not in SHARED_APPS]
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-
+TENANT_MODEL = "clients.Client" 
+TENANT_DOMAIN_MODEL = "clients.Domain"
 
 MIDDLEWARE = [
+    'django_tenants.middleware.main.TenantMainMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -82,6 +89,9 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT'),
     }
 }
+DATABASE_ROUTERS = (
+    'django_tenants.routers.TenantSyncRouter',
+)
 
 AUTH_USER_MODEL="users.User"
 

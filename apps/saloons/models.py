@@ -12,7 +12,7 @@ class Saloon(models.Model):
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
-    admin = models.ForeignKey(Admin, on_delete=models.CASCADE, null=True)
+    admin = models.ForeignKey(Admin, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
