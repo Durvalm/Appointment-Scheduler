@@ -5,7 +5,6 @@ import dj_database_url
 prod_db = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
 DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
-print(DATABASES)
 
-DEBUG = True
-ALLOWED_HOSTS = ['www.superbarber.site', 'saloon.lol', 'https://superbarberapp.herokuapp.com', 'superbarberapp.herokuapp.com']
+DEBUG = False
+ALLOWED_HOSTS = ['*']
