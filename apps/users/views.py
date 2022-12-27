@@ -14,7 +14,7 @@ def login(request):
 
         # authenticates if username and password are matching (using email as username)
         user = auth.authenticate(email=email, password=password)
-        
+
         # if authenticated, go to home page
         if user is not None:
             auth.login(request, user)
@@ -68,7 +68,10 @@ def edit_user(request):
         email = request.POST['email']
         username = request.POST['username']
         
-        user = User.objects.get(email=email)
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = None
 
         # if inputted email already exists in the db, throw an error
         if user:
