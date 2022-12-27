@@ -36,15 +36,32 @@
                     <h4>Store</h4>
                 </li>
                 <a href="{% url 'manage-permissions' %}" class="list-group-item card-text" style="font-size: 18px;">
-                    Manage Permissions
+                    Permissions
                 </a>
                 <a href="{% url 'manage-stores' %}" class="list-group-item card-text" style="font-size: 18px;">
-                    Manage Stores
+                    Stores
                 </a>
                 <a class="list-group-item card-text" style="font-size: 18px;" data-bs-toggle="modal" data-bs-target="#store-email">
                     Store Email 
                 </a>
                 {% include 'admin/settings/email-change.html' %}
+                
+                </ul>
+            </div>
+        </div>          
+
+        <div class="card mx-auto mt-2" style="width: 36rem;">
+            <div class="card-body">
+                <ul class="list-group list-group-flush" style="list-style-type: none;">
+                <li class="card-title">
+                    <h4>Payments</h4>
+                </li>
+                <a href="#" class="list-group-item card-text" style="font-size: 18px;">
+                    Payments Settings
+                </a>
+                <a href="#" class="list-group-item card-text" style="font-size: 18px;">
+                    Payouts
+                </a>
                 </ul>
             </div>
         </div>          

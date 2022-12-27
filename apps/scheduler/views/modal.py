@@ -140,6 +140,7 @@ def handle_barber_input(request):
     service = cache.get('service')
     available_schedule = cache.get('available_schedule')
     available_barbers = cache.get('available_barbers')
+    tax, cost, total = None, None, None
 
     # Get the chosen barber by user, and display price charged for determined service 
     try:
@@ -151,7 +152,7 @@ def handle_barber_input(request):
         tax = round(cost * 0.07, 2)
         total = cost + tax
     # Display message if there's no such barber
-    except Barber.DoesNotExist:
+    except:
         messages.warning(request, 'Barber is not available for this service, please choose from the options.')
     
     context = {

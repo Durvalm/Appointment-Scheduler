@@ -25,7 +25,7 @@ $(function() {
     cb(start, end);
 });
 
-BASE_URL = 'http://127.0.0.1:8000'
+// BASE_URL = 'http://127.0.0.1:8000'
 
 $('#daterange').daterangepicker();
 $('#reportrange').on('hide.daterangepicker', function(ev, picker) {
@@ -34,7 +34,7 @@ $('#reportrange').on('hide.daterangepicker', function(ev, picker) {
 
   $.ajax({
     type: "GET",
-    url: `${BASE_URL}/backoffice/date-filter-dashboard/`,
+    url: `/backoffice/date-filter-dashboard/`,
     data: {
         'startDate': startDate,
         'endDate': endDate,

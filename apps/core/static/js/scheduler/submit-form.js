@@ -11,7 +11,7 @@ $(document).on('click', '#submit', function (e) {
 
         $.ajax({
             type: "POST",
-            url: `http://127.0.0.1:8000/handle-payment/`,
+            url: `/handle-payment/`,
             crossDomain: true,
             data: {
                 // send data to backend
@@ -42,7 +42,7 @@ $(document).on('change', '#barber-picker', function (e) {
 
     $.ajax({
         type: "POST",
-        url: `http://127.0.0.1:8000/handle-barber-input/`,
+        url: `/handle-barber-input/`,
         data: {
             // send data to the backend
             'barber': barber,

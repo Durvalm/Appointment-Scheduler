@@ -5,7 +5,7 @@ $(document).on('change', '.date-picker', function (e) {
 
     $.ajax({
         type: "POST",
-        url: `http://127.0.0.1:8000/handle-date-input/`,
+        url: `/handle-date-input/`,
         data: {
             'date': date,
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
@@ -28,7 +28,7 @@ $(document).on('change', '#hour-picker', function (e) {
 
     $.ajax({
         type: "POST",
-        url: `http://127.0.0.1:8000/handle-hour-input/`,
+        url: `/handle-hour-input/`,
         data: {
             'hour': hour,
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),

@@ -35,10 +35,12 @@ def handle_payment(request):
                         'currency': 'usd',
                         'unit_amount': int(total*100),
                         'product_data': {
-                            'name': service.name
+                            'name': service.name,
+                            'images': ['https://i2.wp.com/therighthairstyles.com/wp-content/uploads/2021/09/1-the-ivy-league-mens-cut.jpg?resize=500%2C592',]
                         },
                     },
                     'quantity': 1,
+                    
                 },
             ],
             metadata={
@@ -50,6 +52,8 @@ def handle_payment(request):
                 'cost': float(request.POST['cost']),
                 'total': total,
             },
+            # description='EXAMPLE',
+            # images=['https://cdn.pixabay.com/photo/2016/03/21/23/25/link-1271843__480.png'],
             mode='payment',
             success_url='http://127.0.0.1:8000' + f'/scheduler/?success=yes',
             cancel_url='http://127.0.0.1:8000' + f'/scheduler/?error=yes',

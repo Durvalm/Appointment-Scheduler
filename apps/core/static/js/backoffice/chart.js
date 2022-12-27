@@ -1,5 +1,5 @@
 
-BASE_URL = 'http://127.0.0.1:8000'
+// BASE_URL = 'http://127.0.0.1:8000'
 
 // For each date range, get data from the back and display it by replacing values in the Chart canvas
 graphRange = document.querySelectorAll('#graph-range span');
@@ -9,7 +9,7 @@ graphRange.forEach(dateRange => {
 
         $.ajax({
             type: "GET",
-            url: `${BASE_URL}/backoffice/date-filter-graph/`,
+            url: `/backoffice/date-filter-graph/`,
             data: {
                 days: dateRange.id
             },
