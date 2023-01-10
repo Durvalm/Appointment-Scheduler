@@ -9,9 +9,14 @@ def login(request):
     if request.method == 'POST':
         password = request.POST['password']
         email = request.POST['email']
-        user = User.objects.get(email=email)
-    
 
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = None
+            messages.error(request, 'credentials are not valid')
+            return redirect('login')
+    
         # authenticates if username and password are matching (using email as username)
         user = auth.authenticate(email=email, password=password)
 
@@ -20,9 +25,6 @@ def login(request):
             auth.login(request, user)
             return redirect('home')
         # if not authenticated, return back to login page
-        else:
-            messages.error(request, 'credentials are not valid')
-            return redirect('login')
 
     return render(request, 'accounts/login.html')
 

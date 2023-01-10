@@ -97,6 +97,17 @@ class UserTest(TenantTestCase):
         res = self.client.login(email=user.email, password='Test123!')
         self.assertEquals(res, True)
     
+    def test_login_user_with_wrong_email(self):
+        """Test login user with wrong email"""
+        payload = {
+            'email':'test@example.com',
+            'password':'Test123!',
+        }
+        res = self.client.post(reverse('login'), payload)
+        redirected_path = res.request.get('PATH_INFO')
+
+        self.assertEquals(redirected_path, reverse('login'))
+        
     def test_logout(self):
         """Test logout user"""
         user = create_user('test@example.com')

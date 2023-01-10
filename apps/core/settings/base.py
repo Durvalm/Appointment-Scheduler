@@ -165,5 +165,6 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 # Crontab
 CRONJOBS = [
     ('1 0-12 * * *', 'apps.core.cron.clean_schedule'),
-    ('1 0-12 * * *', 'apps.core.cron.add_schedule')
+    ('1 0-12 * * *', 'apps.core.cron.add_schedule'),
 ]
+
