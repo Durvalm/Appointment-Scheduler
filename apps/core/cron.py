@@ -13,7 +13,6 @@ def clean_schedule():
         with tenant_context(tenant):
             for schedule in schedules:
                 if schedule.date < datetime.now().date():
-                    print(schedule)
                     schedule.delete()
                 elif schedule.date == datetime.now().date():
                     if schedule.time < datetime.now().time():
@@ -44,4 +43,11 @@ def add_schedule():
                 for hour in hour_lst:
                     schedule, created = Schedule.objects.get_or_create(date=day, time=hour, is_available=True)
                     barber.schedule.add(schedule)
+    
+def oi():
+    print(oi)
 
+if __name__ == '__main__':
+    # clean_schedule()
+    # add_schedule()
+    oi()
