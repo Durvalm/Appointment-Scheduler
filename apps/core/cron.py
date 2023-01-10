@@ -13,6 +13,7 @@ def clean_schedule():
         with tenant_context(tenant):
             for schedule in schedules:
                 if schedule.date < datetime.now().date():
+                    print(schedule)
                     schedule.delete()
                 elif schedule.date == datetime.now().date():
                     if schedule.time < datetime.now().time():
