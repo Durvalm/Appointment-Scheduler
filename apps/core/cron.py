@@ -44,10 +44,3 @@ def add_schedule():
                     schedule, created = Schedule.objects.get_or_create(date=day, time=hour, is_available=True)
                     barber.schedule.add(schedule)
     
-def oi():
-    print(oi)
-
-if __name__ == '__main__':
-    # clean_schedule()
-    # add_schedule()
-    oi()
