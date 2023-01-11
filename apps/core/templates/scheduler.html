@@ -112,32 +112,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- customer reviews -->
-            <header class="section-heading pt-5">
-                <div class="container pt-4 text-center">
-                    <h3>Customer Reviews </h3>
-                    <!-- logic to display stars in reviews -->
-                    <div class="rating-star">
-                        <span>
-                            <i class="fa fa-star{% if saloon.average_review < 0.5 %}-o{% elif saloon.average_review >= 0.5 and saloon.average_review < 1 %}-half-o {% endif %}"
-                                aria-hidden="true"></i>
-                            <i class="fa fa-star{% if saloon.average_review < 1.5 %}-o{% elif saloon.average_review >= 1.5 and saloon.average_review < 2 %}-half-o {% endif %}"
-                                aria-hidden="true"></i>
-                            <i class="fa fa-star{% if saloon.average_review < 2.5 %}-o{% elif saloon.average_review >= 2.5 and saloon.average_review < 3 %}-half-o {% endif %}"
-                                aria-hidden="true"></i>
-                            <i class="fa fa-star{% if saloon.average_review < 3.5 %}-o{% elif saloon.average_review >= 3.5 and saloon.average_review < 4 %}-half-o {% endif %}"
-                                aria-hidden="true"></i>
-                            <i class="fa fa-star{% if saloon.average_review < 4.5 %}-o{% elif saloon.average_review >= 4.5 and saloon.average_review < 5 %}-half-o {% endif %}"
-                                aria-hidden="true"></i>
-                            <!-- show how many reviews were given and the average review -->
-                            <span>{{ saloon.review_count }} reviews</span>
-                            <h4>{{saloon.average_review}}/5.0</h4>
-                        </span>
-                    </div>
-                </div>
-            </header>
-            <!-- col ends -->
         </div>
         <!-- row ends -->
     </div>

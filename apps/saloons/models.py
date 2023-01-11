@@ -22,35 +22,6 @@ class Saloon(models.Model):
         always remember to divide address by spaces in the database"""
         sliced = self.address.split(' ')
         return sliced
-    
-    def average_review(self):
-        """Computer the average review of each saloon"""
-        reviews = Review.objects.filter(saloon=self).aggregate(average=Avg('rating'))
-        avg = 0
-        if reviews['average'] is not None:
-            avg = float(reviews['average'])
-        return round(avg, 1)
-
-    def review_count(self):
-        """Compute how many reviews the saloon has"""
-        reviews = Review.objects.filter(saloon=self).aggregate(count=Count('id'))
-        count = 0
-        if reviews['count'] is not None:
-            count = int(reviews['count'])
-        return count
-
-
-class Review(models.Model):
-    """Model that creates a review"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    saloon = models.ForeignKey(Saloon, on_delete=models.CASCADE, null=True)
-    review = models.TextField(max_length=500, blank=True)
-    rating = models.FloatField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.review[0:15]
 
 
 class Appointment(models.Model):
