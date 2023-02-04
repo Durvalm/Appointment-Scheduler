@@ -3,13 +3,13 @@
 <html lang="en">
   <head>
     <link
-      href="{% static 'img/favicon.ico' %}"
+      href="{{saloon.favicon.url}}"
       rel="shortcut icon"
       type="image/x-icon"
     />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=0.8" />
-    <title>Super Barbershop | The most professional barbers</title>
+    <title>{{saloon.title}}</title>
 
     <!-- bootstrap -->
     <link
@@ -43,14 +43,16 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
     <link
-      href="{% static 'css/review.css' %}"
+      href="{% static 'css/home.css' %}"
       rel="stylesheet"
       type="text/css"
     />
   </head>
 
   <body>
-    {% include 'includes/navbar.html' %} {% block content %} {% endblock %}
+    {% include 'includes/navbar.html' %} 
+    {% block content %} 
+    {% endblock %}
   </body>
 
   <!-- javascript -->

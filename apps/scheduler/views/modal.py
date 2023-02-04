@@ -15,7 +15,7 @@ from datetime import datetime
 
 def home(request):
     """Renders out home page"""
-    return render(request, 'home.html')
+    return render(request, 'layouts/home.html')
 
 
 def scheduler(request):

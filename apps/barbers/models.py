@@ -15,7 +15,6 @@ class Barber(models.Model):
     def __str__(self):
         return self.user.username
 
-
     def sales(self):
         """Returns how many sales the barber performed"""
         appointments = Appointment.objects.filter(barber=self)

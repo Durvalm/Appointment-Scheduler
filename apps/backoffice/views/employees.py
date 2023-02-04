@@ -28,7 +28,7 @@ def add_employee(request):
             return redirect('employees')
         else:
             # if all information is valid, create user
-            user = User.objects.create_barber(email=email, username=username)
+            user = User.objects.create_barber(email=email, username=username, saloon=request.user.saloon)
             barber = Barber.objects.create(user_id=user.id, saloon=request.user.saloon)
             user.save()
             barber.save()

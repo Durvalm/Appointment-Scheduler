@@ -11,3 +11,6 @@ def all_services(request):
     all_services = Service.objects.all()
     return dict(all_services=all_services)
 
+def saloon(request):
+    saloon = Saloon.objects.first()
+    return dict(saloon=saloon)

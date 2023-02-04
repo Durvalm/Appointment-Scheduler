@@ -58,15 +58,15 @@ def add_total_spent(user, total):
 
 def send_appointment_mail(user, saloon, barber, date, hours):
     # Send Email of appointment
-        connection = get_email_host(saloon)
-        subject = f'Your Appointment to Super Barbershop in {saloon.city}'
-        messages = [f'Hi {user.username}, thank you for relying on us, your appointment will be on day {date}, at {hours}.',
-                    f'New appointment with {user.username} on day {date}, at {hours}.']
-        email_from = saloon.admin.host_email
-        recipient_list = [user.email, barber.user.email]
-        # Email sent to barber and to user
-        send_mail(subject, messages[0], email_from, [recipient_list[0],], connection=connection)
-        send_mail(subject, messages[1], email_from, [recipient_list[1],], connection=connection)
+    connection = get_email_host(saloon)
+    subject = f'Your Appointment to Super Barbershop in {saloon.city}'
+    messages = [f'Hi {user.username}, thank you for relying on us, your appointment will be on day {date}, at {hours}.',
+                f'New appointment with {user.username} on day {date}, at {hours}.']
+    email_from = saloon.admin.host_email
+    recipient_list = [user.email, barber.user.email]
+    # Email sent to barber and to user
+    send_mail(subject, messages[0], email_from, [recipient_list[0],], connection=connection)
+    send_mail(subject, messages[1], email_from, [recipient_list[1],], connection=connection)
 
 def get_payment_session(request):
     payload = request.body

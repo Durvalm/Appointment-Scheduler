@@ -85,7 +85,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-
     def __str__(self):
         """Returns email as a string"""
         return self.email

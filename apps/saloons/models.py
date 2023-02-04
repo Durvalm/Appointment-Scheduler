@@ -5,14 +5,21 @@ from apps.users.models import User, Admin
 class Saloon(models.Model):
     """Model that takes care of each saloon/franchise"""
 
+    admin = models.ForeignKey(Admin, on_delete=models.CASCADE, null=True, blank=True)
+
+    # Fields related to the layout
     name = models.CharField(max_length=50)
+    layout_image = models.ImageField(upload_to='header', blank=True)
+    favicon = models.ImageField(upload_to='header', blank=True)
+    layout_text = models.CharField(max_length=50, blank=True)
+    title = models.CharField(max_length=50, blank=True)
+
     # Fields related to location
     street_number = models.CharField(max_length=10, blank=True)
     address = models.CharField(max_length=100, blank=True)  
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
-    admin = models.ForeignKey(Admin, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
