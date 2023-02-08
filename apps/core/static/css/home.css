@@ -8,4 +8,30 @@
     color: white;
 }
 
+/* map */
+.mapouter {
+    position: relative;
+    text-align: right;
+    height: 550px;
+    width: 650px;
+}
 
+.gmap_canvas {
+    overflow: hidden;
+    background: none !important;
+    height: 550px;
+    width: 650px;
+}
+
+.map-responsive{
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+}
+
+.map-responsive iframe{
+    left:0;
+    top:0;
+    position:absolute;
+}

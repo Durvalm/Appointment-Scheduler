@@ -24,7 +24,7 @@ def get_available_hours(barbers, date):
     # Create a set with all hours available for these barbers 
     available_schedule = []
     for barber in barbers:
-        for day in barber.schedule.all():
+        for day in barber.schedule.all().order_by('time'):
             # Append available time to the set
             if str(day.date) == date and day.time.strftime('%H:%M') not in available_schedule and day.is_available:
                 available_schedule.append(day.time.strftime('%I:%M %p'))  # Display AM PM format to users

@@ -1,0 +1,29 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/scheduler.css' %}">
+
+<!-- services available -->
+<section>
+<div class="d-flex justify-content-center">
+    <ul class="list-group list-group-flush overflow-scroll" id="services">
+        <!-- display all services and open modal with dynamic information related to the saloon and service -->
+        {% for service in all_services %}
+        <li id="service-name-{{service.id}}" class=" list-group-item list-group-item-action">
+            🔥{{service.name}}💈
+            <br>
+            <small id="service-description-{{service.id}}" class="text-muted">
+                {{service.description}}
+            </small>
+            {% if saloon %}
+            <!-- htmx and JS to send dynamic data to modal -->
+            <button hx-get="{% url 'modal' service.id %}" hx-target="#dialog"
+                class="badge rounded-pill btn btn-primary float-end">Book</button>
+            {% endif %}
+        </li>
+        {% endfor %}
+        <!-- Placeholder for the modal -->
+        <div id="modal" class="modal fade">
+            <div id="dialog" class="modal-dialog"></div>
+        </div>
+    </ul>
+</div>
+</section>

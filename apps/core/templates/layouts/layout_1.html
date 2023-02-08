@@ -1,0 +1,13 @@
+{% load static %}
+
+<div class="img-fluid bg-image"
+    style="background: linear-gradient(rgba(18, 17, 18, 0.8), rgba(24, 22, 22, 0.8)), url('{{saloon.layout.image.url}}'); height: 100vh; background-size: cover; background-position: center;">
+       <div id="header" class="position-absolute top-50 start-50 translate-middle text-center">
+        <h1 class="display-1">{{saloon.layout.text}}</h1>
+        <a href="{% url 'scheduler' %}" class="cta btn btn-primary btn-lg">
+            <h1>Book Now</h1>
+        </a>
+    </div>
+</div>
+
+

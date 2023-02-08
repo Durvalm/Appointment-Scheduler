@@ -20,6 +20,9 @@
         <li class="nav-item">
           <a href="{% url 'scheduler' %}" class="nav-link active">Book Now</a>
         </li>
+        <li class="nav-item">
+          <a href="{% url 'scheduler' %}" class="nav-link active">Professionals</a>
+        </li>
 
         {% if not request.user.is_authenticated %}
         <li class="nav-item">

@@ -15,7 +15,7 @@ from datetime import datetime
 
 def home(request):
     """Renders out home page"""
-    return render(request, 'layouts/home.html')
+    return render(request, 'home/home.html')
 
 
 def scheduler(request):
@@ -44,7 +44,7 @@ def scheduler(request):
         'saloon': saloon,
         'is_single': is_single,
     }        
-    return render(request, 'scheduler.html', context)
+    return render(request, 'scheduler/scheduler.html', context)
 
 def search_saloon(request):
     """Handle Post request from saloon search"""

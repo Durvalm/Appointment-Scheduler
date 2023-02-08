@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Add Layout dynamically -->
+{% with lay=saloon.layout|stringformat:"s"|add:".html" %}
+{% include "layouts/"|add:lay %}
+{% endwith %}
+<!-- Barbers Section -->
+
+<!-- Map Section -->
+{% include "home/map.html" %}
+
+{% endblock %}

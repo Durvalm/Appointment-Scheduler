@@ -1,0 +1,21 @@
+<!-- search box section -->
+<section>
+    {% include 'includes/alerts.html' %}
+    {% if not is_single %}
+    <form method="POST" action="{% url 'search-saloon' %}" autocomplete="off">
+        {% csrf_token %}
+        <div class="input-group">
+            <input class="form-control" id="loc" required list="saloons" type="text" name="saloon"
+                placeholder="Enter Here the Location You Would Like To Visit" onkeydown="return false;">
+            <!-- datalist with all saloons -->
+            <datalist id="saloons">
+                {% for saloon in all_saloons %}
+                <option value="{{saloon.city}}" name="saloon1">
+                {% endfor %}
+            </datalist>
+            <button class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    {% else %}
+    {% endif %}
+    </section>

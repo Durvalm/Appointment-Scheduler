@@ -9,10 +9,9 @@ class Saloon(models.Model):
 
     # Fields related to the layout
     name = models.CharField(max_length=50)
-    layout_image = models.ImageField(upload_to='header', blank=True)
     favicon = models.ImageField(upload_to='header', blank=True)
-    layout_text = models.CharField(max_length=50, blank=True)
     title = models.CharField(max_length=50, blank=True)
+    layout = models.ForeignKey('Layout', on_delete=models.CASCADE, null=True, blank=True)
 
     # Fields related to location
     street_number = models.CharField(max_length=10, blank=True)
@@ -30,6 +29,14 @@ class Saloon(models.Model):
         sliced = self.address.split(' ')
         return sliced
 
+
+class Layout(models.Model):
+    name = models.CharField(max_length=50, blank=True)
+    image = models.ImageField(upload_to='header', blank=True)
+    text = models.CharField(max_length=50, blank=True)
+
+    def __str__(self):
+        return self.name
 
 class Appointment(models.Model):
     """Model that holds all of the appointments"""

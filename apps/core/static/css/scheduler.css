@@ -1,0 +1,29 @@
+#scheduler-header {
+    font-family: 'Frank Ruhl Libre' sans-serif;
+    font-weight: bold;
+}
+
+#services {
+    width: 100%;
+    height: 50vh;
+}
+
+#scheduler-image {
+    object-fit: cover;
+    height: 50vh;
+    object-position: center;    
+}
+
+
+@media (min-width: 768px) {
+    #scheduler-image-container {
+        margin-top: 2%;
+    }
+}
+
+@media (min-width: 576px) {
+    #services {
+        width: 70%;
+    }
+}
+
