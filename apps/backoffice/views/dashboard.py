@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from apps.backoffice.views.employees import employees
 # App imports
 from ..services import query_date_range, graph_first_entry, income_per_service, income_per_employee
-from ..permissions import admin_member_required
+from ...utils.permissions import admin_member_required
  
 
 @admin_member_required

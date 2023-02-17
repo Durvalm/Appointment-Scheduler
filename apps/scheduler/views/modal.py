@@ -17,6 +17,9 @@ def home(request):
     """Renders out home page"""
     return render(request, 'home/home.html')
 
+def professionals(request):
+    """Renders out professionals page"""
+    return render(request, 'professionals/index.html')
 
 def scheduler(request):
     """Renders out scheduling page with all necessary data"""

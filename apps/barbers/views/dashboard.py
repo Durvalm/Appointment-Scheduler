@@ -6,7 +6,9 @@ from apps.saloons.models import Appointment
 from apps.barbers.models import Service
 from ..services import change_status
 from apps.scheduler.services import create_user
+from apps.utils.permissions import barber_member_required
 
+@barber_member_required
 def employee_dashboard(request):
     """Render employee dashboard on the screen"""
     # Get first 10 entries of appointments made with request.barber

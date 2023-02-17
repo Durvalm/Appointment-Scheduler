@@ -21,16 +21,29 @@
           <a href="{% url 'scheduler' %}" class="nav-link active">Book Now</a>
         </li>
         <li class="nav-item">
-          <a href="{% url 'scheduler' %}" class="nav-link active">Professionals</a>
+          <a href="{% url 'professionals' %}" class="nav-link active">Professionals</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link active dropdown-toggle" href="#" id="staff" 
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Staff
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="staff">
+            <li><a class="dropdown-item" href="{% url 'dashboard' %}">Admin</a></li>
+            <li><a class="dropdown-item" href="{% url 'employee-dashboard' %}">Barber</a></li>
+            {% if request.user.is_authenticated %}
+            <li><a class="dropdown-item" href="{% url 'logout' %}" class="nav-link active">Logout</a></li>
+            {% endif %}
+          </ul>
         </li>
 
-        {% if not request.user.is_authenticated %}
+        <!-- {% if not request.user.is_authenticated %}
         <li class="nav-item">
           <a href="{% url 'login' %}" class="nav-link active">Login</a>
-        </li>
-        {% else %}
-        {% if request.user.is_admin or request.user.is_staff %}
-        <li class="nav-item">
+        </li> -->
+        <!-- {% else %} -->
+        <!-- {% if request.user.is_admin or request.user.is_staff %} -->
+        <!-- <li class="nav-item">
           <a href="{% url 'dashboard' %}" class="nav-link active">Admin</a>
         </li>
         {% endif %}
@@ -41,8 +54,8 @@
         {% endif %}
         <li class="nav-item">
           <a href="{% url 'logout' %}" class="nav-link active">Logout</a>
-        </li>
-        {% endif %}
+        </li> -->
+        <!-- {% endif %} -->
       </ul>
     </div>
   </div>
