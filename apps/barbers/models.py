@@ -11,6 +11,7 @@ class Barber(models.Model):
     schedule = models.ManyToManyField('Schedule', blank=True)
     service = models.ManyToManyField('Service', blank=True)
     price = models.ManyToManyField('Price', blank=True)
+    photo = models.ImageField(upload_to='barbers', blank=True)
 
     def __str__(self):
         return self.user.username

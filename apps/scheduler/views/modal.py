@@ -19,7 +19,8 @@ def home(request):
 
 def professionals(request):
     """Renders out professionals page"""
-    return render(request, 'professionals/index.html')
+    barbers = Barber.objects.all()
+    return render(request, 'professionals/index.html', {'barbers': barbers})
 
 def scheduler(request):
     """Renders out scheduling page with all necessary data"""

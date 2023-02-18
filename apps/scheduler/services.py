@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from apps.saloons.models import Saloon
 from apps.users.models import User
-from apps.core.email_host import get_email_host
+from apps.utils.email_host import get_email_host
 from django.conf import settings
 
 import stripe

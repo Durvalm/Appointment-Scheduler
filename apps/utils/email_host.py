@@ -1,6 +1,6 @@
 from django.core.mail import get_connection, send_mail
 from django.core.mail.message import EmailMessage
-from . import settings
+from ..core import settings
 
 def get_email_host(saloon):
     connection = get_connection(

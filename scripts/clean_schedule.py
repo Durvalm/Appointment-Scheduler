@@ -1,4 +1,4 @@
-from apps.core.cron import clean_schedule
+from apps.utils.cron import clean_schedule
 
 def run():
     clean_schedule()

@@ -3,4 +3,31 @@
 
 {% block content %}
 
+<style>
+    .display-1 {
+        font-family: 'Frank Ruhl Libre' sans-serif;
+        font-weight: bold;
+    }
+    .img-fluid{
+        object-fit: cover;
+        height: 350px;
+        width: 350px;
+    }
+</style>
+
+<section>
+    <h1 class="display-1 text-center pb-2">
+        Our Team
+    </h1>
+    <div class="container">
+        <div class="row text-center gy-3">
+            {% for barber in barbers %}
+            <div class="col-12 col-md-12 col-lg-4">
+                <img class="img-fluid" src="{{ barber.photo.url }}">
+                <h3>{{barber.user.username}}</h3>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 {% endblock %}
